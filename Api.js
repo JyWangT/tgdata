@@ -1,12 +1,7 @@
 /* 讓靜態網頁跟 Apps Script 說話。介面跟 google.script.run 一樣，所以頁面程式碼不用改。
- *
- * 兩條路：
- *   1. POST（快，但會被瀏覽器的跨網域規則擋，視你的部署設定而定）
- *   2. JSONP（用 <script> 載入，不受 CORS 限制，一定會通）
- * 第一次呼叫時自動測試，哪條通就固定用哪條。
- */
+ * 先試 POST（快），被瀏覽器跨網域規則擋住就自動改用 JSONP（一定通）。 */
 (function () {
-  var MODE = null;                      // null 未知 / 'post' / 'jsonp'
+  var MODE = null;
   try { MODE = sessionStorage.getItem('apimode') || null; } catch (e) {}
 
   function runner() {
@@ -14,11 +9,10 @@
     var r = {
       withSuccessHandler: function (f) { ok = f; return r; },
       withFailureHandler: function (f) { fail = f; return r; },
-      call:   function (token, fn, args) { send({op:'call', token:token, fn:fn, args:args || []}); },
-      login:  function (u, p)            { send({op:'login', username:u, password:p}); },
-      logout: function (t)               { send({op:'logout', token:t}); }
+      call:   function (token, fn, args) { transport({op:'call', token:token, fn:fn, args:args || []}, ok, fail); },
+      login:  function (u, p)            { transport({op:'login', username:u, password:p}, ok, fail); },
+      logout: function (t)               { transport({op:'logout', token:t}, ok, fail); }
     };
-    function send(body) { transport(body, ok, fail); }
     return r;
   }
 
@@ -31,7 +25,7 @@
 
     fetch(window.API_URL, {
       method: 'POST',
-      headers: {'Content-Type': 'text/plain;charset=utf-8'},  // text/plain 不會觸發預檢
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
       body: JSON.stringify(body),
       redirect: 'follow'
     })
@@ -41,7 +35,7 @@
       if (j && j.__error) fail(new Error(j.__error)); else ok(j ? j.result : null);
     })
     .catch(function () {
-      if (MODE === null) { setMode('jsonp'); jsonp(body, ok, fail); }   // POST 被擋 → 改走 JSONP
+      if (MODE === null) { setMode('jsonp'); jsonp(body, ok, fail); }
       else fail(new Error('連不上後端'));
     });
   }
@@ -53,7 +47,6 @@
     var name = '__cb' + (++seq) + '_' + Date.now();
     var url = window.API_URL + (window.API_URL.indexOf('?') < 0 ? '?' : '&') +
               'callback=' + name + '&q=' + encodeURIComponent(JSON.stringify(body));
-
     if (url.length > 7500) { fail(new Error('內容太長，請縮短後再送出')); return; }
 
     var s = document.createElement('script');
@@ -75,7 +68,6 @@
   window.google = { script: {} };
   Object.defineProperty(window.google.script, 'run', { get: runner });
 
-  /* 瀏覽器端快取：先顯示上次的資料，背景再更新 */
   window.lsGet = function (k) { try { var v = localStorage.getItem('c:' + k); return v ? JSON.parse(v) : null; } catch (e) { return null; } };
   window.lsSet = function (k, v) { try { localStorage.setItem('c:' + k, JSON.stringify(v)); } catch (e) {} };
 })();
