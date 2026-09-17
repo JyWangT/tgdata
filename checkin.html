@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="config.js"></script>
+<script src="api.js"></script>
+<style>
+body{font-size:14px}
+header{background:var(--primary);color:#fff;padding:13px 20px;display:flex;
+  align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+header .t{font-family:"Noto Serif TC",serif;font-size:17px;letter-spacing:2px}
+header .t small{display:block;font-family:"Noto Sans TC",sans-serif;font-size:11.5px;
+  letter-spacing:1px;color:rgba(255,255,255,.65);font-weight:400;margin-top:1px}
+header a{color:rgba(255,255,255,.8);font-size:12.5px;text-decoration:none;
+  border:1px solid rgba(255,255,255,.35);padding:4px 12px;border-radius:99px}
+header a:hover{background:rgba(255,255,255,.12);color:#fff}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 60px}
+.cols{display:grid;gap:16px}
+@media(min-width:860px){.cols{grid-template-columns:400px 1fr}}
+.scanbox{background:var(--primary);border-radius:7px;padding:22px 20px;text-align:center;color:#fff}
+.scanbox .lb{font-size:12.5px;letter-spacing:2px;color:rgba(255,255,255,.7);margin-bottom:10px}
+#scan{font-family:ui-monospace,Menlo,monospace;font-size:19px;text-align:center;letter-spacing:2px;
+  padding:13px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:#fff}
+#scan::placeholder{color:rgba(255,255,255,.45);letter-spacing:1px;font-size:15px}
+#scan:focus{border-color:#fff;background:rgba(255,255,255,.16)}
+.scanbox .st{font-size:12px;margin-top:10px;color:rgba(255,255,255,.72);
+  display:flex;align-items:center;justify-content:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:#7ee2a8;animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(126,226,168,.6)}70%{box-shadow:0 0 0 7px rgba(126,226,168,0)}100%{box-shadow:0 0 0 0 rgba(126,226,168,0)}}
+.dot.off{background:#f0b8b8;animation:none}
+.flash{margin-top:13px;border-radius:var(--radius);padding:14px;text-align:center;
+  opacity:0;transform:scale(.97);transition:.18s}
+.flash.on{opacity:1;transform:scale(1)}
+.flash.ok{background:var(--ok-bg);border:1px solid #bfe0cc}
+.flash.err{background:var(--err-bg);border:1px solid #f0c9c1}
+.flash.dup{background:var(--warn-bg);border:1px solid #ecd9ae}
+.flash .big{font-family:"Noto Serif TC",serif;font-size:21px;font-weight:700;letter-spacing:2px}
+.flash.ok .big{color:var(--ok)}.flash.err .big{color:var(--err)}.flash.dup .big{color:var(--warn)}
+.flash .sm{font-size:12.5px;color:var(--text-2);margin-top:2px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{background:var(--accent);border-radius:var(--radius);padding:11px;text-align:center}
+.tile .k{font-size:11px;color:var(--muted)}
+.tile .v{font-family:"Noto Serif TC",serif;font-size:24px;font-weight:700;color:var(--primary);line-height:1.3}
+.prog{height:6px;background:var(--accent);border-radius:99px;overflow:hidden;margin-top:12px}
+.prog>div{height:100%;background:var(--primary);border-radius:99px;transition:width .3s}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#fbf8f7;text-align:left;font-size:11.5px;color:var(--muted);letter-spacing:.5px;
+  padding:8px 12px;border-bottom:1px solid var(--line);font-weight:700}
+td{padding:8px 12px;border-bottom:1px solid var(--line-soft)}
+td.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+tr.new td{animation:hl 1.6s ease-out}
+@keyframes hl{0%{background:#e8f3ec}100%{background:transparent}}
+.kbd{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#fff;
+  border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 6px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="t" id="hdTitle">掃碼簽到<small id="hdSub">載入中⋯⋯</small></div>
+  <span style="display:flex;gap:8px"><a href="admin.html">← 回後台</a><a class="logout" onclick="doLogout()">登出</a></span>
+</header>
+
+<div class="wrap">
+  <div id="loading" class="loading">載入中⋯⋯</div>
+
+  <div class="cols" id="app" style="display:none">
+    <div>
+      <div class="card">
+        <div class="f">
+          <label>目前課堂</label>
+          <select id="session" onchange="switchSession()"></select>
+        </div>
+
+        <div class="scanbox">
+          <div class="lb">請掃描學員證</div>
+          <input id="scan" autocomplete="off" placeholder="掃碼機掃一下即可" autofocus>
+          <div class="st"><span class="dot" id="dot"></span><span id="stText">等待掃描中⋯⋯</span></div>
+        </div>
+
+        <div class="flash" id="flash"></div>
+
+        <button class="btn ghost block sm" style="margin-top:11px" onclick="manual()">
+          手動補簽（輸入學號或姓名）</button>
+
+        <div class="note" style="margin-top:14px">
+          掃碼機接上電腦就是一個<b>鍵盤</b>：掃一下 = 快速打出學號再按 <span class="kbd">Enter</span>。
+          所以這頁只要有個常駐游標的輸入框就成立，不需要相機權限。
+          每掃一筆，資料立刻寫進試算表的「出席」分頁。
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>本堂出席</h3>
+        <div class="tiles">
+          <div class="tile"><div class="k">應到</div><div class="v" id="nTotal">0</div></div>
+          <div class="tile"><div class="k">已簽到</div><div class="v" id="nIn">0</div></div>
+          <div class="tile"><div class="k">未到</div><div class="v" id="nOut">0</div></div>
+        </div>
+        <div class="prog"><div id="prog" style="width:0%"></div></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">出席率 <b id="pct">0%</b></div>
+      </div>
+
+      <div class="card flush">
+        <h3>簽到名單
+          <span><button class="btn ghost sm" onclick="exportCsv()">匯出</button>
+          <button class="btn ghost sm" onclick="reload()">重新整理</button></span>
+        </h3>
+        <div style="overflow-x:auto">
+          <table><thead><tr><th>時間</th><th>學號</th><th>姓名</th><th>方式</th></tr></thead>
+          <tbody id="list"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== 登入畫面 ===== -->
+<div class="login-mask" id="loginMask">
+  <form class="login-box" onsubmit="doLogin();return false;">
+    <div class="login-title">佛寶寺</div>
+    <div class="login-sub">掃 碼 簽 到</div>
+    <div id="loginMsg" class="msg error"></div>
+    <div class="f"><label>帳號</label><input id="lgUser" autocomplete="username" autocapitalize="off"></div>
+    <div class="f"><label>密碼</label><input id="lgPass" type="password" autocomplete="current-password"></div>
+    <button type="submit" class="btn block big" id="lgBtn">登 入</button>
+    <div class="hint" style="text-align:center;margin-top:12px">管理員帳號：<code>admin</code>　密碼：<code>0000</code></div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SESSIONS = [], SID = null, EXPECT = 0, SIGNED = [], sending = false;
+
+var NEED_ROLE = '管理員';
+
+/* ================= 登入（帳號密碼存在試算表「帳號」分頁） ================= */
+var TK = '';
+try { TK = sessionStorage.getItem('tk') || ''; } catch (e) {}
+
+/** 所有後端呼叫都走這裡：帶著 token 給 call()，未登入／逾時就跳登入畫面 */
+function rpc(fn, args, ok, fail) {
+  google.script.run.withSuccessHandler(ok || function () {}).withFailureHandler(function (e) {
+    var m = (e && e.message) || String(e);
+    if (/請先登入|沒有權限|未知的函式/.test(m)) { showLogin(m.indexOf('沒有權限') >= 0 ? m : ''); return; }
+    if (fail) fail(e); else toast('發生錯誤：' + m);
+  }).call(TK, fn, args || []);
+}
+function showLogin(msg) {
+  document.getElementById('loginMask').classList.add('on');
+  var el = document.getElementById('loginMsg');
+  if (msg) { el.textContent = msg; el.classList.add('on'); } else el.classList.remove('on');
+  setTimeout(function () { try { document.getElementById('lgUser').focus(); } catch (e) {} }, 60);
+}
+function hideLogin() { document.getElementById('loginMask').classList.remove('on'); }
+function lgErr(m) { var el = document.getElementById('loginMsg'); el.textContent = m; el.classList.add('on'); }
+function doLogin() {
+  var u = document.getElementById('lgUser').value.trim();
+  var p = document.getElementById('lgPass').value;
+  if (!u || !p) return lgErr('請輸入帳號與密碼');
+  var b = document.getElementById('lgBtn'); b.disabled = true; b.textContent = '登入中⋯⋯';
+  google.script.run.withSuccessHandler(function (r) {
+    b.disabled = false; b.textContent = '登 入';
+    if (!r.ok) return lgErr(r.message);
+    if (NEED_ROLE && r.role !== NEED_ROLE) return lgErr('這個帳號沒有後台權限（需要管理員帳號）');
+    TK = r.token; try { sessionStorage.setItem('tk', TK); } catch (e) {}
+    document.getElementById('lgPass').value = '';
+    hideLogin(); start();
+  }).withFailureHandler(function (e) {
+    b.disabled = false; b.textContent = '登 入'; lgErr('登入失敗：' + e.message);
+  }).login(u, p);
+}
+function doLogout() {
+  var t = TK; TK = ''; try { sessionStorage.removeItem('tk'); } catch (e) {}
+  try { google.script.run.logout(t); } catch (e) {}
+  try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('c:') === 0) localStorage.removeItem(k); }); } catch (e) {}
+  location.reload();
+}
+window.addEventListener('load', function () { if (!TK) showLogin(); else start(); });
+
+function start() {
+  rpc('checkinBoot', [], boot, function (e) {
+    document.getElementById('loading').innerHTML =
+      '載入失敗：' + e.message + '<br><br>如果顯示沒有權限，請確認你用管理員帳號登入。';
+  });
+}
+
+function boot(b) {
+  SESSIONS = b.sessions;
+  if (!SESSIONS.length) {
+    document.getElementById('loading').innerHTML =
+      '<div class="empty">還沒有建立任何堂次。<br>請先到後台的「堂次管理」新增。</div>';
+    return;
+  }
+  document.getElementById('session').innerHTML = SESSIONS.map(function (s) {
+    return '<option value="' + s.id + '">' + esc(s.label) + (s.today ? '　★ 今天' : '') + '</option>';
+  }).join('');
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'grid';
+  switchSession();
+  startFocusWatch();
+}
+
+function switchSession() {
+  SID = document.getElementById('session').value;
+  var s = SESSIONS.filter(function (x) { return x.id === SID; })[0];
+  document.getElementById('hdSub').textContent = s ? s.label : '';
+  reload();
+}
+
+function reload() {
+  rpc('checkinRoster', [SID], function (r) {
+    EXPECT = r.expect; SIGNED = r.signed || [];
+    paint(); focusScan();
+  }, function (e) { toast('讀取失敗：' + e.message); });
+}
+
+/* ---------- 掃描：掃碼機 = 鍵盤 + Enter ---------- */
+var el = document.getElementById('scan');
+el.addEventListener('keydown', function (e) {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  var code = el.value.trim();
+  el.value = '';
+  if (code) send(code, '掃碼');
+});
+
+function send(code, way) {
+  if (sending) return;
+  sending = true;
+  document.getElementById('stText').textContent = '寫入試算表⋯⋯';
+
+  rpc('checkinScan', [SID, code, way], function (r) {
+    sending = false;
+    if (r.kind === 'ok') {
+      SIGNED.unshift({no:r.no, name:r.name, at:r.at, way:way});
+      flash('ok', r.name, '學號 ' + r.no + '　第 ' + r.count + ' 位' +
+        (r.enrolled ? '' : '　⚠ 未報名這門課'));
+      beep(880, .09); paint();
+    } else if (r.kind === 'dup') {
+      flash('dup', '已經簽到過了', r.name + '　' + r.at); beep(420, .1);
+    } else {
+      flash('err', '查無此學員', r.message); beep(200, .12);
+    }
+    focusScan();
+  }, function (e) {
+    sending = false; flash('err', '寫入失敗', e.message); beep(200, .12); focusScan();
+  });
+}
+
+function manual() {
+  var v = prompt('手動補簽 —— 輸入學號或姓名：');
+  if (v && v.trim()) send(v.trim(), '手動');
+  focusScan();
+}
+
+/* ---------- 畫面 ---------- */
+function paint() {
+  document.getElementById('nTotal').textContent = EXPECT;
+  document.getElementById('nIn').textContent = SIGNED.length;
+  document.getElementById('nOut').textContent = Math.max(0, EXPECT - SIGNED.length);
+  var pct = EXPECT ? Math.round(SIGNED.length / EXPECT * 100) : 0;
+  document.getElementById('prog').style.width = Math.min(100, pct) + '%';
+  document.getElementById('pct').textContent = pct + '%';
+
+  document.getElementById('list').innerHTML = SIGNED.length ? SIGNED.map(function (s, i) {
+    return '<tr class="' + (i === 0 ? 'new' : '') + '"><td class="mono">' + esc(s.at) +
+      '</td><td class="mono">' + esc(s.no) + '</td><td>' + esc(s.name) + '</td>' +
+      '<td><span class="tag ' + (s.way === '掃碼' ? 'ok' : 'info') + '">' + esc(s.way) + '</span></td></tr>';
+  }).join('') : '<tr><td colspan="4"><div class="empty">尚未有人簽到<br>掃第一張學員證試試</div></td></tr>';
+}
+
+function flash(kind, big, sm) {
+  var f = document.getElementById('flash');
+  f.className = 'flash on ' + kind;
+  f.innerHTML = '<div class="big">' + esc(big) + '</div><div class="sm">' + esc(sm) + '</div>';
+  clearTimeout(flash._t);
+  flash._t = setTimeout(function () { f.classList.remove('on'); }, 2800);
+}
+
+/* 常駐焦點：掃碼機隨時掃都進得來 */
+function focusScan() { try { el.focus(); } catch (e) {} }
+function startFocusWatch() {
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('button,select,a,input,textarea')) return;
+    setTimeout(focusScan, 40);
+  });
+  setInterval(function () {
+    var a = document.activeElement;
+    var busy = a && a !== el && ['SELECT','BUTTON','TEXTAREA','INPUT'].indexOf(a.tagName) >= 0;
+    document.getElementById('dot').classList.toggle('off', busy);
+    if (!sending) document.getElementById('stText').textContent =
+      busy ? '游標不在掃描框 —— 點一下畫面恢復' : '等待掃描中⋯⋯';
+  }, 700);
+}
+
+function beep(freq, dur) {
+  try {
+    var C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+    beep._c = beep._c || new C();
+    var o = beep._c.createOscillator(), g = beep._c.createGain();
+    o.frequency.value = freq; o.type = 'sine';
+    g.gain.setValueAtTime(.11, beep._c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, beep._c.currentTime + dur);
+    o.connect(g); g.connect(beep._c.destination);
+    o.start(); o.stop(beep._c.currentTime + dur);
+  } catch (e) {}
+}
+
+function exportCsv() {
+  var s = SESSIONS.filter(function (x) { return x.id === SID; })[0];
+  var csv = '﻿"時間","學號","姓名","方式"\n' + SIGNED.map(function (r) {
+    return '"' + r.at + '","' + r.no + '","' + r.name + '","' + r.way + '"'; }).join('\n');
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = (s ? s.label.replace(/[\/\s]/g, '_') : 'checkin') + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+var tT;
+function toast(m) {
+  var t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('on');
+  clearTimeout(tT); tT = setTimeout(function () { t.classList.remove('on'); }, 2600);
+}
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

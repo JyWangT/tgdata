@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="config.js"></script>
+<script src="api.js"></script>
+<style>
+header{background:var(--primary);color:#fff}
+.hd{max-width:940px;margin:0 auto;padding:16px 16px 0;display:flex;
+  align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:"Noto Serif TC",serif;font-size:19px;font-weight:700;letter-spacing:3px}
+.brand small{display:block;font-family:"Noto Sans TC",sans-serif;font-size:10.5px;
+  letter-spacing:2px;font-weight:400;color:rgba(255,255,255,.6);margin-top:2px}
+nav{max-width:940px;margin:0 auto;padding:0 16px;display:flex;gap:2px;overflow-x:auto}
+nav::-webkit-scrollbar{display:none}
+nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,.6);
+  font-family:"Noto Serif TC",serif;font-size:14.5px;font-weight:600;letter-spacing:1px;
+  padding:10px 14px 9px;cursor:pointer;white-space:nowrap}
+nav button:hover{color:#fff}
+nav button.on{color:#fff;border-bottom-color:#fff}
+main{max-width:940px;margin:0 auto;padding:24px 16px 70px}
+.view{display:none}.view.on{display:block}
+h1{font-family:"Noto Serif TC",serif;font-size:20px;letter-spacing:2px;margin:0 0 3px}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 20px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px;margin-bottom:12px}
+.item:hover{border-color:#cdb0b0}
+.item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.item h4{font-family:"Noto Serif TC",serif;font-size:17px;margin:0 0 4px;font-weight:700}
+.meta{font-size:13.5px;color:var(--muted);line-height:1.9}
+.meta b{color:var(--text);font-weight:500}
+.autofill{display:none;margin-top:9px;padding:8px 11px;background:var(--accent);
+  border-left:3px solid var(--primary);border-radius:0 var(--radius) var(--radius) 0;
+  font-size:12.5px;color:var(--primary)}
+.autofill.on{display:block}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(102px,1fr));gap:8px}
+.slot{border:1px solid var(--line);border-radius:var(--radius);padding:9px 6px;text-align:center;
+  font-size:13.5px;cursor:pointer;background:#fff}
+.slot:hover{border-color:#cdb0b0}
+.slot.on{border-color:var(--primary);background:var(--accent);color:var(--primary);font-weight:700}
+.slot small{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.slot.on small{color:var(--primary)}
+.ann{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin-bottom:18px}
+.ann.pin{border-left-color:var(--primary)}
+.ann .t{font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px}
+.ann .d{font-size:12px;color:var(--muted);margin-bottom:5px}
+.ann .b{font-size:14px;color:#3d3230;white-space:pre-wrap}
+.grid{display:grid;gap:14px}
+@media(min-width:680px){.grid.two{grid-template-columns:1fr 1fr}}
+.mine{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:11px}
+.mine .h{background:var(--accent);padding:9px 14px;font-size:13px;color:var(--primary);
+  font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mine .b{padding:13px 14px}
+.kv{display:flex;font-size:13.5px;line-height:2}
+.kv span{color:var(--muted);width:66px;flex:none}
+.idcard{background:linear-gradient(160deg,#890c25,#6d0a1e);color:#fff;border-radius:8px;
+  padding:20px;text-align:center}
+.idcard .nm{font-family:"Noto Serif TC",serif;font-size:19px;letter-spacing:2px}
+.idcard .no{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;
+  color:rgba(255,255,255,.7);letter-spacing:1px;margin-bottom:14px}
+.idcard img,.idcard .qrbox{background:#fff;padding:8px;border-radius:5px;display:inline-block}
+.idcard .tip{font-size:11.5px;color:rgba(255,255,255,.62);margin-top:11px;line-height:1.6}
+footer{text-align:center;font-size:12px;color:var(--muted);letter-spacing:1px;padding:0 0 32px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <div class="brand" id="brand">　<small id="brandEn">　</small></div>
+    <a class="logout" onclick="doLogout()">登出</a>
+  </div>
+  <nav id="nav"></nav>
+</header>
+<div id="adminBar" hidden style="background:#fbf1e0;border-bottom:1px solid #ecd9ae;padding:10px 16px;text-align:center;font-size:13.5px;color:#7a6320">
+  你目前是以<b>管理員</b>身分登入 —— 這一頁是給學員報名用的。
+  <a href="admin.html" style="display:inline-block;margin-left:10px;padding:4px 14px;background:var(--primary);color:#fff;border-radius:99px;text-decoration:none;font-weight:500">前往後台管理 →</a>
+</div>
+
+<main>
+  <div id="loading" class="loading">載入中⋯⋯</div>
+
+  <div id="app" style="display:none">
+    <section class="view on" data-v="courses">
+      <h1>禪修課程</h1>
+      <p class="lead">選擇適合您的課程報名。初次參加建議從入門課程開始。</p>
+      <div id="courseList"></div>
+    </section>
+
+    <section class="view" data-v="ceremonies">
+      <h1>法會報名</h1>
+      <p class="lead">隨喜參加，共沾法益。</p>
+      <div id="ceremonyList"></div>
+    </section>
+
+    <section class="view" data-v="bulletin">
+      <h1>公告欄</h1>
+      <p class="lead">寺方最新消息與課程通知。</p>
+      <div id="annList"></div>
+    </section>
+
+    <section class="view" data-v="mine">
+      <h1>我的報名</h1>
+      <p class="lead">輸入報名時使用的 Email，即可查詢紀錄、取消報名、顯示學員證。</p>
+      <div class="card">
+        <label>Email</label>
+        <div style="display:flex;gap:9px">
+          <input id="myEmail" type="email" placeholder="your@email.com"
+                 onkeydown="if(event.key==='Enter')lookupMine()">
+          <button class="btn" id="myBtn" onclick="lookupMine()">查詢</button>
+        </div>
+      </div>
+      <div id="mineResult"></div>
+    </section>
+  </div>
+</main>
+
+<footer>南無本師釋迦牟尼佛</footer>
+
+<div class="mask" id="mask" onclick="if(event.target===this)closeM()">
+  <div class="modal">
+    <div class="mh"><b id="mTitle">報名</b><button class="x" onclick="closeM()">&times;</button></div>
+    <div class="mb">
+      <div id="mMsg" class="msg error"></div>
+      <div class="meta" id="mSummary" style="margin-bottom:16px"></div>
+      <div class="f">
+        <label>Email<span class="r">*</span></label>
+        <input id="mEmail" type="email" oninput="deb()">
+        <div class="hint">報名過的話，填完會自動帶出上次的資料。</div>
+        <div class="autofill" id="mAuto"></div>
+      </div>
+      <div class="row two">
+        <div class="f"><label>姓名<span class="r">*</span></label><input id="mName"></div>
+        <div class="f"><label>聯絡電話</label><input id="mPhone" type="tel"></div>
+      </div>
+      <div class="f" id="mExtraWrap" style="display:none">
+        <label>附薦／消災（選填）</label>
+        <textarea id="mExtra" placeholder="每行一位，例如：　陽上　王小明"></textarea>
+      </div>
+      <div class="f"><label>備註</label><textarea id="mNote"
+        placeholder="有任何需要寺方知道的事，寫在這裡（選填）"></textarea></div>
+      <button class="btn block big" id="mBtn" onclick="submitSignup()">送 出 報 名</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== 登入畫面 ===== -->
+<div class="login-mask" id="loginMask">
+  <form class="login-box" onsubmit="doLogin();return false;">
+    <div class="login-title">佛寶寺</div>
+    <div class="login-sub">禪 修 課 程 報 名</div>
+    <div id="loginMsg" class="msg error"></div>
+    <div class="f"><label>帳號</label><input id="lgUser" autocomplete="username" autocapitalize="off"></div>
+    <div class="f"><label>密碼</label><input id="lgPass" type="password" autocomplete="current-password"></div>
+    <button type="submit" class="btn block big" id="lgBtn">登 入</button>
+    <div class="hint" style="text-align:center;margin-top:12px">學員帳號：<code>学员</code>　密碼：<code>0000</code></div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var D = null, cur = null, debT = null, lastMail = '';
+
+var TABS = [['courses','禪修課程'],['ceremonies','法會報名'],
+            ['bulletin','公告欄'],['mine','我的報名']];
+
+var NEED_ROLE = null;   // 報名頁：學員或管理員都可以
+
+/* ================= 登入（帳號密碼存在試算表「帳號」分頁） ================= */
+var TK = '';
+try { TK = sessionStorage.getItem('tk') || ''; } catch (e) {}
+
+/** 所有後端呼叫都走這裡：帶著 token 給 call()，未登入／逾時就跳登入畫面 */
+function rpc(fn, args, ok, fail) {
+  google.script.run.withSuccessHandler(ok || function () {}).withFailureHandler(function (e) {
+    var m = (e && e.message) || String(e);
+    if (/請先登入|沒有權限|未知的函式/.test(m)) { showLogin(m.indexOf('沒有權限') >= 0 ? m : ''); return; }
+    if (fail) fail(e); else toast('發生錯誤：' + m);
+  }).call(TK, fn, args || []);
+}
+function showLogin(msg) {
+  document.getElementById('loginMask').classList.add('on');
+  var el = document.getElementById('loginMsg');
+  if (msg) { el.textContent = msg; el.classList.add('on'); } else el.classList.remove('on');
+  setTimeout(function () { try { document.getElementById('lgUser').focus(); } catch (e) {} }, 60);
+}
+function hideLogin() { document.getElementById('loginMask').classList.remove('on'); }
+function lgErr(m) { var el = document.getElementById('loginMsg'); el.textContent = m; el.classList.add('on'); }
+function doLogin() {
+  var u = document.getElementById('lgUser').value.trim();
+  var p = document.getElementById('lgPass').value;
+  if (!u || !p) return lgErr('請輸入帳號與密碼');
+  var b = document.getElementById('lgBtn'); b.disabled = true; b.textContent = '登入中⋯⋯';
+  google.script.run.withSuccessHandler(function (r) {
+    b.disabled = false; b.textContent = '登 入';
+    if (!r.ok) return lgErr(r.message);
+    if (NEED_ROLE && r.role !== NEED_ROLE) return lgErr('這個帳號沒有後台權限（需要管理員帳號）');
+    TK = r.token; try { sessionStorage.setItem('tk', TK); sessionStorage.setItem('role', r.role); } catch (e) {}
+    document.getElementById('lgPass').value = '';
+    hideLogin(); start();
+  }).withFailureHandler(function (e) {
+    b.disabled = false; b.textContent = '登 入'; lgErr('登入失敗：' + e.message);
+  }).login(u, p);
+}
+function doLogout() {
+  var t = TK; TK = ''; try { sessionStorage.removeItem('tk'); sessionStorage.removeItem('role'); } catch (e) {}
+  try { google.script.run.logout(t); } catch (e) {}
+  try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('c:') === 0) localStorage.removeItem(k); }); } catch (e) {}
+  location.reload();
+}
+window.addEventListener('load', function () { if (!TK) showLogin(); else start(); });
+
+function showAdminBar() {
+  var role = ''; try { role = sessionStorage.getItem('role') || ''; } catch (e) {}
+  document.getElementById('adminBar').hidden = (role !== '管理員');
+}
+
+/* ---------- 啟動：跟後端要資料 ---------- */
+function start() {
+  var cached = lsGet('pub'); if (cached) boot(cached);          // 先畫上次的
+  rpc('getPublicData', [], function (d) { lsSet('pub', d); boot(d); }, function (e) {
+    if (cached) return;
+      document.getElementById('loading').textContent = '載入失敗：' + e.message;
+    });
+}
+
+function boot(d) {
+  D = d;
+  document.getElementById('brand').firstChild.nodeValue = d.temple;
+  document.getElementById('brandEn').textContent = d.templeEn;
+  document.getElementById('nav').innerHTML = TABS.map(function (t, i) {
+    return '<button class="' + (i ? '' : 'on') + '" data-k="' + t[0] + '">' + t[1] + '</button>';
+  }).join('');
+  renderCourses(); renderCeremonies(); renderAnn();
+  showAdminBar();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+document.getElementById('nav').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('#nav button').forEach(function (x) {
+    x.classList.toggle('on', x === b); });
+  document.querySelectorAll('.view').forEach(function (x) {
+    x.classList.toggle('on', x.dataset.v === b.dataset.k); });
+  window.scrollTo(0, 0);
+});
+
+/* ---------- 列表 ---------- */
+function meter(taken, cap) {
+  if (!cap) return '';
+  var pct = Math.min(100, Math.round(taken / cap * 100)), left = Math.max(0, cap - taken);
+  var cls = left === 0 ? 'full' : (left <= 5 ? 'hot' : '');
+  return '<div class="meter"><div class="bar"><div class="fill ' + cls +
+    '" style="width:' + pct + '%"></div></div><div class="lbl"><span>名額 ' + cap + ' 位</span>' +
+    (left === 0 ? '<span>已額滿</span>' : '<span>尚餘 <b>' + left + '</b> 位</span>') + '</div></div>';
+}
+function renderCourses() {
+  var box = document.getElementById('courseList');
+  if (!D.courses.length) { box.innerHTML = '<div class="empty">目前沒有開放報名的課程。</div>'; return; }
+  box.innerHTML = D.courses.map(function (c) {
+    return '<div class="item"><div class="item-top"><div>' +
+      '<h4>' + esc(c.name) + (c.sec ? '　' + esc(c.sec) : '') +
+        '<span class="tag' + (c.level === '進階' ? '' : ' info') + '">' + esc(c.level) + '</span>' +
+        (c.full ? '<span class="tag">已額滿</span>' : '') + '</h4>' +
+      '<div class="meta">' + esc(c.day) + '　·　' + esc(c.place) + '<br><b>' + esc(c.teacher) +
+        '</b> 主講　·　' + esc(c.start) + ' 開課，共 ' + c.weeks + ' 堂</div></div>' +
+      '<button class="btn' + (c.full ? ' grey' : '') + '" onclick="openM(\'' + c.id + '\',\'course\')">' +
+        (c.full ? '登記候補' : '我要報名') + '</button></div>' + meter(c.taken, c.cap) + '</div>';
+  }).join('');
+}
+function renderCeremonies() {
+  var box = document.getElementById('ceremonyList');
+  if (!D.ceremonies.length) { box.innerHTML = '<div class="empty">目前沒有開放報名的法會。</div>'; return; }
+  box.innerHTML = D.ceremonies.map(function (f) {
+    return '<div class="item"><div class="item-top"><div>' +
+      '<h4>' + esc(f.name) + (f.full ? '<span class="tag">已額滿</span>' : '') + '</h4>' +
+      '<div class="meta"><b>' + esc(f.date) + '</b> ' + esc(f.time) + '　·　' + esc(f.place) +
+        (f.desc ? '<br>' + esc(f.desc) : '') + '</div></div>' +
+      '<button class="btn' + (f.full ? ' grey' : '') + '" onclick="openM(\'' + f.id + '\',\'ceremony\')">' +
+        (f.full ? '登記候補' : '我要報名') + '</button></div>' + meter(f.taken, f.cap) + '</div>';
+  }).join('');
+}
+function renderAnn() {
+  var box = document.getElementById('annList');
+  box.innerHTML = D.announcements.length ? D.announcements.map(function (a) {
+    return '<div class="ann' + (a.pin ? ' pin' : '') + '"><div class="t">' + esc(a.title) +
+      (a.pin ? '<span class="tag">置頂</span>' : '') + '</div><div class="d">' + esc(a.date) +
+      '</div><div class="b">' + esc(a.body) + '</div></div>';
+  }).join('') : '<div class="empty">目前沒有公告。</div>';
+}
+
+/* ---------- 報名 Modal ---------- */
+function openM(id, kind) {
+  var list = kind === 'course' ? D.courses : D.ceremonies;
+  cur = list.filter(function (x) { return x.id === id; })[0];
+  cur._kind = kind;
+
+  document.getElementById('mTitle').textContent = cur.full ? '登記候補' : '報名';
+  document.getElementById('mSummary').innerHTML =
+    '<b class="serif" style="font-size:16px">' + esc(cur.name) + (cur.sec ? '　' + esc(cur.sec) : '') + '</b><br>' +
+    (kind === 'course' ? esc(cur.day) : esc(cur.date) + ' ' + esc(cur.time)) + '　·　' + esc(cur.place) +
+    (cur.full ? '<br><span class="tag warn">已額滿，送出後將列入候補名單</span>' : '');
+  document.getElementById('mExtraWrap').style.display =
+    (kind === 'ceremony' && cur.extra) ? 'block' : 'none';
+  document.getElementById('mBtn').textContent = cur.full ? '登 記 候 補' : '送 出 報 名';
+
+  ['mEmail','mName','mPhone','mNote','mExtra'].forEach(function (i) {
+    document.getElementById(i).value = ''; });
+  document.getElementById('mAuto').classList.remove('on');
+  document.getElementById('mMsg').classList.remove('on');
+  lastMail = '';
+  document.getElementById('mask').classList.add('on');
+}
+function closeM() { document.getElementById('mask').classList.remove('on'); }
+
+/* ★ 自動帶出資料：停止打字 0.6 秒後去查 Google Sheet */
+function deb() { clearTimeout(debT); debT = setTimeout(autofill, 600); }
+function autofill() {
+  var e = document.getElementById('mEmail').value.trim().toLowerCase();
+  if (!e || e.indexOf('@') < 0 || e === lastMail) return;
+  lastMail = e;
+  rpc('lookupStudent', [e], function (s) {
+    var box = document.getElementById('mAuto');
+    if (!s) { box.classList.remove('on'); return; }
+    if (!document.getElementById('mName').value)  document.getElementById('mName').value  = s.name || '';
+    if (!document.getElementById('mPhone').value) document.getElementById('mPhone').value = s.phone || '';
+    box.textContent = '歡迎回來，' + s.name + (s.no ? '（學號 ' + s.no + '）' : '') + '　已帶出您上次的資料';
+    box.classList.add('on');
+  }, function () {});
+}
+
+function submitSignup() {
+  var email = document.getElementById('mEmail').value.trim();
+  var name  = document.getElementById('mName').value.trim();
+  if (!email || email.indexOf('@') < 0) return mErr('請填寫正確的 Email。');
+  if (!name) return mErr('請填寫姓名。');
+
+  var payload = {name:name, email:email,
+    phone:document.getElementById('mPhone').value.trim(),
+    note:document.getElementById('mNote').value.trim(),
+    extra:document.getElementById('mExtra').value.trim()};
+
+  var btn = busy('mBtn', '送出中⋯⋯');
+  var done = function (r) {
+    btn();
+    if (!r.ok) return mErr(r.message);
+    closeM();
+    toast(r.waitlist ? '✓ 已登記候補，有名額會以 Email 通知'
+                     : '✓ 報名成功' + (r.mailSent ? '，確認信已寄出' : '（確認信稍後補寄）'));
+    refresh();
+  };
+  var boom = function (e) { btn(); mErr('送出失敗：' + e.message); };
+
+  if (cur._kind === 'course') {
+    payload.courseId = cur.id;
+    rpc('submitEnrollment', [payload], done, boom);
+  } else {
+    payload.ceremonyId = cur.id;
+    rpc('submitCeremony', [payload], done, boom);
+  }
+}
+function mErr(m) {
+  var el = document.getElementById('mMsg');
+  el.textContent = m; el.classList.add('on');
+  return false;
+}
+
+/* ---------- 我的報名 ---------- */
+function lookupMine() {
+  var e = document.getElementById('myEmail').value.trim();
+  if (!e || e.indexOf('@') < 0) return toast('請填寫正確的 Email');
+  var box = document.getElementById('mineResult');
+  box.innerHTML = '<div class="loading">查詢中⋯⋯</div>';
+
+  rpc('getMySignups', [e], function (r) {
+    if (!r) { box.innerHTML = '<div class="empty">查不到這個 Email 的報名紀錄。</div>'; return; }
+    var s = r.student;
+    var qr = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=' +
+             encodeURIComponent(s.no || s.id);
+    box.innerHTML =
+      '<div class="grid two" style="margin-bottom:14px">' +
+        '<div class="idcard"><div class="nm">' + esc(s.name) + '</div>' +
+        '<div class="no">' + (s.no ? '學號 ' + esc(s.no) : esc(s.id)) + '</div>' +
+        '<div class="qrbox"><img src="' + qr + '" width="150" height="150" alt="學員證 QR"></div>' +
+        '<div class="tip">上課時出示此碼，<br>由義工用掃碼機簽到</div></div>' +
+        '<div class="card" style="margin:0"><h3>基本資料</h3>' +
+        kv('姓名', s.name) + kv('Email', s.email) + kv('電話', s.phone || '—') +
+        kv('學號', s.no || '—') + kv('報名次數', s.times + ' 次') + '</div>' +
+      '</div>' +
+      '<h1 style="font-size:16px;margin:22px 0 10px">報名紀錄</h1>' +
+      (r.items.length ? r.items.map(function (it) {
+        var cls = it.status === '候補' ? 'warn' : (it.status.indexOf('取消') >= 0 ? 'err' : 'ok');
+        var can = it.status === '已報名' || it.status === '候補' || it.status === '已預約';
+        return '<div class="mine"><div class="h"><span>' + it.type + '　' + esc(it.name) + '</span>' +
+          '<span class="tag ' + cls + '">' + it.status + '</span></div><div class="b">' +
+          '<div class="meta">' + esc(it.when || '—') + (it.extra ? '<br>' + esc(it.extra) : '') + '</div>' +
+          (can ? '<button class="btn grey sm" style="margin-top:9px" onclick="cancelIt(\'' +
+                 it.kind + '\',\'' + it.id + '\')">取消報名</button>' : '') +
+          '</div></div>';
+      }).join('') : '<div class="empty">目前沒有報名紀錄。</div>');
+  }, function (er) {
+    box.innerHTML = '<div class="empty">查詢失敗：' + er.message + '</div>';
+  });
+}
+function kv(k, v) { return '<div class="kv"><span>' + k + '</span>' + esc(v) + '</div>'; }
+
+function cancelIt(kind, id) {
+  if (!confirm('確定要取消這筆報名嗎？')) return;
+  rpc('cancelSignup', [kind, id], function (r) {
+    if (!r.ok) return toast(r.message);
+    toast('✓ 已取消');
+    lookupMine(); refresh();
+  }, function (e) { toast('取消失敗：' + e.message); });
+}
+
+/* ---------- 共用 ---------- */
+function refresh() {
+  rpc('getPublicData', [], function (d) {
+    D = d; renderCourses(); renderCeremonies();
+  });
+}
+function busy(id, text) {
+  var b = document.getElementById(id), old = b.textContent;
+  b.disabled = true; b.innerHTML = '<span class="spinner"></span>' + text;
+  return function () { b.disabled = false; b.textContent = old; };
+}
+var tT;
+function toast(m) {
+  var el = document.getElementById('toast');
+  el.textContent = m; el.classList.add('on');
+  clearTimeout(tT); tT = setTimeout(function () { el.classList.remove('on'); }, 2800);
+  return false;
+}
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
