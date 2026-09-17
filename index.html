@@ -104,9 +104,9 @@ footer{text-align:center;font-size:12px;color:var(--muted);letter-spacing:1px;pa
     </section>
 
     <section class="view" data-v="mine">
-      <h1>我的報名</h1>
-      <p class="lead">輸入報名時使用的 Email，即可查詢紀錄、取消報名、顯示學員證。</p>
-      <div class="card">
+      <h1>我的資料</h1>
+      <p class="lead" id="mineLead">您的個人資料、報名紀錄與學員證。</p>
+      <div class="card" id="mineLookup" style="display:none">
         <label>Email</label>
         <div style="display:flex;gap:9px">
           <input id="myEmail" type="email" placeholder="your@email.com"
@@ -158,7 +158,10 @@ footer{text-align:center;font-size:12px;color:var(--muted);letter-spacing:1px;pa
     <div class="f"><label>帳號</label><input id="lgUser" autocomplete="username" autocapitalize="off"></div>
     <div class="f"><label>密碼</label><input id="lgPass" type="password" autocomplete="current-password"></div>
     <button type="submit" class="btn block big" id="lgBtn">登 入</button>
-    <div class="hint" style="text-align:center;margin-top:12px">學員帳號：<code>学员</code>　密碼：<code>0000</code></div>
+    <div class="hint" style="text-align:center;margin-top:12px;line-height:1.9">
+      學員：帳號＝<b>學號</b>，密碼＝<b>電話後四碼</b><br>
+      <span style="opacity:.75">例：學號 2600001、電話 0912-345-<b>678 9</b> → 密碼 6789</span>
+    </div>
   </form>
 </div>
 
@@ -168,13 +171,16 @@ footer{text-align:center;font-size:12px;color:var(--muted);letter-spacing:1px;pa
 var D = null, cur = null, debT = null, lastMail = '';
 
 var TABS = [['courses','禪修課程'],['ceremonies','法會報名'],
-            ['bulletin','公告欄'],['mine','我的報名']];
+            ['bulletin','公告欄'],['mine','我的資料']];
 
 var NEED_ROLE = null;   // 報名頁：學員或管理員都可以
 
 /* ================= 登入（帳號密碼存在試算表「帳號」分頁） ================= */
-var TK = '';
-try { TK = sessionStorage.getItem('tk') || ''; } catch (e) {}
+var TK = '', SID = '', ME = null;
+try {
+  TK  = sessionStorage.getItem('tk')  || '';
+  SID = sessionStorage.getItem('sid') || '';
+} catch (e) {}
 
 /** 所有後端呼叫都走這裡：帶著 token 給 call()，未登入／逾時就跳登入畫面 */
 function rpc(fn, args, ok, fail) {
@@ -201,7 +207,13 @@ function doLogin() {
     b.disabled = false; b.textContent = '登 入';
     if (!r.ok) return lgErr(r.message);
     if (NEED_ROLE && r.role !== NEED_ROLE) return lgErr('這個帳號沒有後台權限（需要管理員帳號）');
-    TK = r.token; try { sessionStorage.setItem('tk', TK); sessionStorage.setItem('role', r.role); } catch (e) {}
+    TK = r.token; SID = r.studentId || '';
+    try {
+      sessionStorage.setItem('tk', TK);
+      sessionStorage.setItem('role', r.role);
+      sessionStorage.setItem('sid', SID);
+      sessionStorage.setItem('nm', r.name || '');
+    } catch (e) {}
     document.getElementById('lgPass').value = '';
     hideLogin(); start();
   }).withFailureHandler(function (e) {
@@ -209,7 +221,8 @@ function doLogin() {
   }).login(u, p);
 }
 function doLogout() {
-  var t = TK; TK = ''; try { sessionStorage.removeItem('tk'); sessionStorage.removeItem('role'); } catch (e) {}
+  var t = TK; TK = ''; SID = ''; ME = null;
+  try { ['tk','role','sid','nm'].forEach(function (k) { sessionStorage.removeItem(k); }); } catch (e) {}
   try { google.script.run.logout(t); } catch (e) {}
   try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('c:') === 0) localStorage.removeItem(k); }); } catch (e) {}
   location.reload();
@@ -237,7 +250,7 @@ function boot(d) {
   document.getElementById('nav').innerHTML = TABS.map(function (t, i) {
     return '<button class="' + (i ? '' : 'on') + '" data-k="' + t[0] + '">' + t[1] + '</button>';
   }).join('');
-  renderCourses(); renderCeremonies(); renderAnn();
+  renderCourses(); renderCeremonies(); renderAnn(); renderMine();
   showAdminBar();
   document.getElementById('loading').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -318,6 +331,11 @@ function openM(id, kind) {
 
   ['mEmail','mName','mPhone','mNote','mExtra'].forEach(function (i) {
     document.getElementById(i).value = ''; });
+  if (SID && ME && ME.student) {                    // 學員已登入：直接帶出自己的資料
+    document.getElementById('mEmail').value = ME.student.email || '';
+    document.getElementById('mName').value  = ME.student.name  || '';
+    document.getElementById('mPhone').value = ME.student.phone || '';
+  }
   document.getElementById('mAuto').classList.remove('on');
   document.getElementById('mMsg').classList.remove('on');
   lastMail = '';
@@ -377,43 +395,104 @@ function mErr(m) {
   return false;
 }
 
-/* ---------- 我的報名 ---------- */
+/* ---------- 我的資料 ---------- */
+/* 學員登入（學號 + 電話後四碼）→ 只看得到自己的資料，不用打 Email。
+   管理員登入 → 保留 Email 查詢，方便代查。 */
+function renderMine() {
+  var box = document.getElementById('mineResult');
+  var lookup = document.getElementById('mineLookup');
+  if (SID) {
+    lookup.style.display = 'none';
+    document.getElementById('mineLead').textContent = '您的個人資料、報名紀錄與學員證。';
+    box.innerHTML = '<div class="loading">載入中⋯⋯</div>';
+    rpc('myProfile', [], function (r) {
+      if (!r) { box.innerHTML = '<div class="empty">找不到您的資料，請聯絡寺方。</div>'; return; }
+      ME = r; drawMine(r, true);
+    }, function (er) { box.innerHTML = '<div class="empty">載入失敗：' + esc(er.message) + '</div>'; });
+  } else {
+    lookup.style.display = '';
+    document.getElementById('mineLead').textContent = '輸入報名時使用的 Email，即可查詢紀錄、取消報名、顯示學員證。';
+    box.innerHTML = '';
+  }
+}
+
 function lookupMine() {
   var e = document.getElementById('myEmail').value.trim();
   if (!e || e.indexOf('@') < 0) return toast('請填寫正確的 Email');
   var box = document.getElementById('mineResult');
   box.innerHTML = '<div class="loading">查詢中⋯⋯</div>';
-
   rpc('getMySignups', [e], function (r) {
     if (!r) { box.innerHTML = '<div class="empty">查不到這個 Email 的報名紀錄。</div>'; return; }
-    var s = r.student;
-    var qr = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=' +
-             encodeURIComponent(s.no || s.id);
-    box.innerHTML =
-      '<div class="grid two" style="margin-bottom:14px">' +
-        '<div class="idcard"><div class="nm">' + esc(s.name) + '</div>' +
-        '<div class="no">' + (s.no ? '學號 ' + esc(s.no) : esc(s.id)) + '</div>' +
-        '<div class="qrbox"><img src="' + qr + '" width="150" height="150" alt="學員證 QR"></div>' +
-        '<div class="tip">上課時出示此碼，<br>由義工用掃碼機簽到</div></div>' +
-        '<div class="card" style="margin:0"><h3>基本資料</h3>' +
-        kv('姓名', s.name) + kv('Email', s.email) + kv('電話', s.phone || '—') +
-        kv('學號', s.no || '—') + kv('報名次數', s.times + ' 次') + '</div>' +
-      '</div>' +
-      '<h1 style="font-size:16px;margin:22px 0 10px">報名紀錄</h1>' +
-      (r.items.length ? r.items.map(function (it) {
-        var cls = it.status === '候補' ? 'warn' : (it.status.indexOf('取消') >= 0 ? 'err' : 'ok');
-        var can = it.status === '已報名' || it.status === '候補' || it.status === '已預約';
-        return '<div class="mine"><div class="h"><span>' + it.type + '　' + esc(it.name) + '</span>' +
-          '<span class="tag ' + cls + '">' + it.status + '</span></div><div class="b">' +
-          '<div class="meta">' + esc(it.when || '—') + (it.extra ? '<br>' + esc(it.extra) : '') + '</div>' +
-          (can ? '<button class="btn grey sm" style="margin-top:9px" onclick="cancelIt(\'' +
-                 it.kind + '\',\'' + it.id + '\')">取消報名</button>' : '') +
-          '</div></div>';
-      }).join('') : '<div class="empty">目前沒有報名紀錄。</div>');
+    drawMine(r, false);
   }, function (er) {
-    box.innerHTML = '<div class="empty">查詢失敗：' + er.message + '</div>';
+    box.innerHTML = '<div class="empty">查詢失敗：' + esc(er.message) + '</div>';
   });
 }
+
+function drawMine(r, self) {
+  var box = document.getElementById('mineResult');
+  var s = r.student;
+  var qr = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=' +
+           encodeURIComponent(s.no || s.id);
+  box.innerHTML =
+    '<div class="grid two" style="margin-bottom:14px">' +
+      '<div class="idcard"><div class="nm">' + esc(s.name) + '</div>' +
+      '<div class="no">' + (s.no ? '學號 ' + esc(s.no) : esc(s.id)) + '</div>' +
+      '<div class="qrbox"><img src="' + qr + '" width="150" height="150" alt="學員證 QR"></div>' +
+      '<div class="tip">上課時出示此碼，<br>由義工用掃碼機簽到</div></div>' +
+      '<div class="card" style="margin:0"><h3>基本資料</h3>' +
+      kv('姓名', s.name) + kv('Email', s.email) + kv('電話', s.phone || '—') +
+      kv('學號', s.no || '—') + kv('報名次數', s.times + ' 次') +
+      (self && r.canEdit ?
+        '<button class="btn grey sm" style="margin-top:12px" onclick="openEditMe()">修改我的資料</button>' : '') +
+      '</div>' +
+    '</div>' +
+    (self ?
+      '<div class="card" id="editMe" style="display:none">' +
+        '<h3>修改我的資料</h3>' +
+        '<div class="row two">' +
+          '<div class="f"><label>姓名</label><input id="emName"></div>' +
+          '<div class="f"><label>聯絡電話</label><input id="emPhone" type="tel"></div>' +
+        '</div>' +
+        '<div class="hint" style="margin-bottom:10px">' +
+          '⚠️ 電話改了，下次登入的密碼也會跟著變成新電話的後四碼。</div>' +
+        '<button class="btn sm" id="emBtn" onclick="saveMe()">儲存</button>' +
+        '<button class="btn grey sm" style="margin-left:8px" ' +
+          'onclick="document.getElementById(\'editMe\').style.display=\'none\'">取消</button>' +
+      '</div>' : '') +
+    '<h1 style="font-size:16px;margin:22px 0 10px">報名紀錄</h1>' +
+    (r.items.length ? r.items.map(function (it) {
+      var cls = it.status === '候補' ? 'warn' : (it.status.indexOf('取消') >= 0 ? 'err' : 'ok');
+      var can = it.status === '已報名' || it.status === '候補' || it.status === '已預約';
+      return '<div class="mine"><div class="h"><span>' + it.type + '　' + esc(it.name) + '</span>' +
+        '<span class="tag ' + cls + '">' + it.status + '</span></div><div class="b">' +
+        '<div class="meta">' + esc(it.when || '—') + (it.extra ? '<br>' + esc(it.extra) : '') + '</div>' +
+        (can ? '<button class="btn grey sm" style="margin-top:9px" onclick="cancelIt(\'' +
+               it.kind + '\',\'' + it.id + '\')">取消報名</button>' : '') +
+        '</div></div>';
+    }).join('') : '<div class="empty">目前沒有報名紀錄。</div>');
+}
+
+function openEditMe() {
+  var w = document.getElementById('editMe'); if (!w || !ME) return;
+  document.getElementById('emName').value  = ME.student.name  || '';
+  document.getElementById('emPhone').value = ME.student.phone || '';
+  w.style.display = '';
+  w.scrollIntoView({behavior:'smooth', block:'center'});
+}
+function saveMe() {
+  var name  = document.getElementById('emName').value.trim();
+  var phone = document.getElementById('emPhone').value.trim();
+  if (!name) return toast('請填寫姓名');
+  var back = busy('emBtn', '儲存中⋯⋯');
+  rpc('updateMyProfile', [{name:name, phone:phone}], function (r) {
+    back();
+    if (!r || !r.ok) return toast((r && r.message) || '儲存失敗');
+    toast('✓ 已更新' + (r.passwordChanged ? '，下次請用新電話後四碼登入' : ''));
+    renderMine();
+  }, function (e) { back(); toast('儲存失敗：' + e.message); });
+}
+
 function kv(k, v) { return '<div class="kv"><span>' + k + '</span>' + esc(v) + '</div>'; }
 
 function cancelIt(kind, id) {
@@ -421,7 +500,8 @@ function cancelIt(kind, id) {
   rpc('cancelSignup', [kind, id], function (r) {
     if (!r.ok) return toast(r.message);
     toast('✓ 已取消');
-    lookupMine(); refresh();
+    if (SID) renderMine(); else lookupMine();
+    refresh();
   }, function (e) { toast('取消失敗：' + e.message); });
 }
 
