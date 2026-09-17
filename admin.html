@@ -474,6 +474,7 @@ function renderAnnounce() {
             : a.to === '全體學員' ? AN.totalStudents : 0;
     var meta = '<span><b>' + tgt + '</b></span>' + (a.to !== '僅公告欄' ? '<span>' + (a.status === '已寄出' ? '已寄 ' + (a.sentCount || 0) : '將寄 ' + cnt) + ' 位</span>' : '') +
       (a.sendAt ? '<span>' + (a.status === '已寄出' ? '寄出' : '發送') + '：' + esc(a.sendAt) + (a.hoursBefore && a.sessionId ? '（課前 ' + a.hoursBefore + ' 小時）' : '') + '</span>' : '') +
+      (a.image ? '<span>🖼 含海報</span>' : '') +
       '<span>建立者：' + esc(a.createdBy || '') + '</span><span class="tag ' + ({'已發布':'ok','已寄出':'ok','排程中':'info','失敗':'err'}[a.status] || '') + '">' + esc(a.status) + '</span>';
     var act = kind === 'pending'
       ? '<span class="lnk" onclick="go(\'announceEdit\',\'' + a.id + '\')">編輯</span><button class="btn ghost sm" onclick="cancelAnn(\'' + a.id + '\')">取消排程</button>'
@@ -502,7 +503,8 @@ function announceEdit(id) {
   var a = id ? AN.list.filter(function (x) { return x.id === id; })[0] : null;
   var reuse = a && (a.status === '已寄出' || a.status === '已取消' || a.status === '失敗');
   ED = {id: reuse ? null : (a ? a.id : null), to: a ? a.to : '全體學員', courseId: a ? a.courseId : '', sessionId: a ? a.sessionId : '',
-        hoursBefore: a ? (a.hoursBefore || 36) : 36, recipients: a ? String(a.recipients || '').split(/[,\n;]+/).filter(Boolean) : []};
+        hoursBefore: a ? (a.hoursBefore || 36) : 36, recipients: a ? String(a.recipients || '').split(/[,\n;]+/).filter(Boolean) : [],
+        image: a ? (a.image || '') : '', imageId: a ? (a.imageId || '') : ''};
   document.getElementById('body').innerHTML =
     head(id && !reuse ? '編輯排程公告' : '新增公告', '', '後台=dash|公告管理=announce|' + (id && !reuse ? '編輯排程' : '新增')) +
     '<div class="ed">' +
@@ -522,6 +524,8 @@ function announceEdit(id) {
       '<div><div class="h">中文</div><textarea id="edBody" style="min-height:170px">' + esc(a ? a.body : '') + '</textarea></div>' +
       '<div><div class="h">English</div><textarea id="edBodyEn" style="min-height:170px" placeholder="Type the English announcement here.">' + esc(a ? a.bodyEn : '') + '</textarea></div></div>' +
     '<div class="hint">系統會把中文與英文接在同一封信裡寄出；只填一種就只寄那一種。信件由 ' + esc(BOOT.temple) + ' 報名系統寄出。</div>' +
+    '<div class="lbl">海報圖片<small>選填　PNG / JPG，最大 5MB　會顯示在公告欄，也會內嵌在信裡</small></div>' +
+    '<div id="imgBox"></div>' +
     '<div class="lbl">發送時間<small>選擇要對應的堂次，將於課前 <input id="edHours" type="number" style="width:64px;padding:2px 6px;font-size:13px" value="' + ED.hoursBefore + '" onchange="ED.hoursBefore=Number(this.value)||36"> 小時自動發送</small></div>' +
     '<div class="slist" id="slist">' + (AN.sessions.length ? AN.sessions.map(function (s) {
       return '<label><input type="radio" name="sess" value="' + s.id + '"' + (ED.sessionId === s.id ? ' checked' : '') + ' onchange="pickSession(\'' + s.id + '\')">' +
@@ -534,8 +538,58 @@ function announceEdit(id) {
       '<button class="btn grey" onclick="saveAnn(\'draft\')">存成草稿</button>' +
       '<button class="btn grey" onclick="go(\'announce\')">取消</button></div>' +
     '</div>';
-  drawTo(); drawPeople();
+  drawTo(); drawPeople(); drawImg();
 }
+
+/* ---------- 海報圖片 ---------- */
+function drawImg() {
+  var box = document.getElementById('imgBox');
+  if (!box) return;
+  if (ED.image) {
+    box.innerHTML =
+      '<div style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px">' +
+        '<img src="' + esc(ED.image) + '" alt="海報" style="width:130px;height:auto;border-radius:4px;border:1px solid var(--line)" ' +
+          'onerror="this.style.display=\'none\';this.nextSibling.hidden=false">' +
+        '<div hidden style="width:130px;font-size:12px;color:var(--err)">圖片載不出來 —— 請確認 Drive 檔案已設為「知道連結的人可檢視」</div>' +
+        '<div style="flex:1;min-width:0"><div style="font-size:12.5px;color:var(--muted);word-break:break-all">' + esc(ED.image) + '</div>' +
+        '<button class="btn grey sm" style="margin-top:9px" onclick="clearImg()">移除圖片</button></div></div>';
+  } else {
+    box.innerHTML =
+      '<div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px">' +
+        '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
+          '<input type="file" id="imgFile" accept="image/png,image/jpeg" style="width:auto;border:none;padding:0;font-size:13px" onchange="doUpload(this)">' +
+          '<span id="imgStatus" style="font-size:12.5px;color:var(--muted)"></span></div>' +
+        '<div style="font-size:12.5px;color:var(--muted);margin:12px 0 6px">或貼上 Google 雲端硬碟的分享連結：</div>' +
+        '<div style="display:flex;gap:8px">' +
+          '<input type="text" id="imgUrl" placeholder="https://drive.google.com/file/d/…/view">' +
+          '<button class="btn ghost sm" onclick="useUrl()">套用</button></div>' +
+        '<div class="hint">貼連結的話，記得在 Drive 把該檔案設成「知道連結的人可以檢視」，否則學員看不到。</div>' +
+      '</div>';
+  }
+}
+function clearImg() { ED.image = ''; ED.imageId = ''; drawImg(); }
+function useUrl() {
+  var u = document.getElementById('imgUrl').value.trim();
+  if (!u) return toast('請先貼上連結');
+  var m = u.match(/\/file\/d\/([a-zA-Z0-9_-]{20,})/) || u.match(/[?&]id=([a-zA-Z0-9_-]{20,})/);
+  ED.image = m ? 'https://lh3.googleusercontent.com/d/' + m[1] + '=w1200' : u;
+  ED.imageId = m ? m[1] : '';
+  drawImg();
+}
+function doUpload(input) {
+  var f = input.files && input.files[0]; if (!f) return;
+  var st = document.getElementById('imgStatus');
+  st.textContent = '上傳中⋯⋯';
+  input.disabled = true;
+  uploadImage(f, TK, function (info) {
+    ED.image = info.url; ED.imageId = info.id; drawImg(); toast('✓ 圖片已上傳');
+  }, function (e) {
+    input.disabled = false; st.textContent = ''; toast(e.message);
+  }, function (n) {
+    st.textContent = '上傳中⋯⋯（' + (n * 2) + ' 秒）';
+  });
+}
+
 function drawTo() {
   var opts = [
     ['全體學員', '全部學員（' + AN.totalStudents + ' 位）', '每次寄送時即時抓取，未來新加入的學員也會自動收到'],
@@ -568,7 +622,8 @@ function saveAnn(mode) {
   var course = AN.courses.filter(function (c) { return c.id === ED.courseId; })[0];
   var rec = {id:ED.id, title:v('edTitle'), titleEn:v('edTitleEn'), body:v('edBody'), bodyEn:v('edBodyEn'),
     to:ED.to, courseId:ED.to === '課程學員' ? ED.courseId : '', course:ED.to === '課程學員' && course ? course.label : '',
-    recipients:ED.recipients, sessionId:ED.sessionId, hoursBefore:ED.hoursBefore, pin:'否'};
+    recipients:ED.recipients, sessionId:ED.sessionId, hoursBefore:ED.hoursBefore,
+    image:ED.image, imageId:ED.imageId, pin:'否'};
   if (mode === 'schedule' && !ED.sessionId) return toast('請選擇要對應的堂次');
   if (mode === 'now' && !confirm('確定要立即寄出嗎？')) return;
   rpc('announceSave', [rec, mode], function (r) {
