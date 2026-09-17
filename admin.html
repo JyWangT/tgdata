@@ -9,174 +9,173 @@
 <script src="config.js"></script>
 <script src="api.js"></script>
 <style>
-header{background:var(--primary);color:#fff}
-.hd{max-width:940px;margin:0 auto;padding:16px 16px 0;display:flex;
-  align-items:center;justify-content:space-between;gap:12px}
-.brand{font-family:"Noto Serif TC",serif;font-size:19px;font-weight:700;letter-spacing:3px}
-.brand small{display:block;font-family:"Noto Sans TC",sans-serif;font-size:10.5px;
-  letter-spacing:2px;font-weight:400;color:rgba(255,255,255,.6);margin-top:2px}
-nav{max-width:940px;margin:0 auto;padding:0 16px;display:flex;gap:2px;overflow-x:auto}
-nav::-webkit-scrollbar{display:none}
-nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,.6);
-  font-family:"Noto Serif TC",serif;font-size:14.5px;font-weight:600;letter-spacing:1px;
-  padding:10px 14px 9px;cursor:pointer;white-space:nowrap}
-nav button:hover{color:#fff}
-nav button.on{color:#fff;border-bottom-color:#fff}
-main{max-width:940px;margin:0 auto;padding:24px 16px 70px}
-.view{display:none}.view.on{display:block}
-h1{font-family:"Noto Serif TC",serif;font-size:20px;letter-spacing:2px;margin:0 0 3px}
-.lead{color:var(--muted);font-size:13.5px;margin:0 0 20px}
-.item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-  padding:16px 18px;margin-bottom:12px}
-.item:hover{border-color:#cdb0b0}
-.item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.item h4{font-family:"Noto Serif TC",serif;font-size:17px;margin:0 0 4px;font-weight:700}
-.meta{font-size:13.5px;color:var(--muted);line-height:1.9}
-.meta b{color:var(--text);font-weight:500}
-.autofill{display:none;margin-top:9px;padding:8px 11px;background:var(--accent);
-  border-left:3px solid var(--primary);border-radius:0 var(--radius) var(--radius) 0;
-  font-size:12.5px;color:var(--primary)}
-.autofill.on{display:block}
-.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(102px,1fr));gap:8px}
-.slot{border:1px solid var(--line);border-radius:var(--radius);padding:9px 6px;text-align:center;
-  font-size:13.5px;cursor:pointer;background:#fff}
-.slot:hover{border-color:#cdb0b0}
-.slot.on{border-color:var(--primary);background:var(--accent);color:var(--primary);font-weight:700}
-.slot small{display:block;font-size:11px;color:var(--muted);margin-top:1px}
-.slot.on small{color:var(--primary)}
-.ann{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin-bottom:18px}
-.ann.pin{border-left-color:var(--primary)}
-.ann .t{font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px}
-.ann .d{font-size:12px;color:var(--muted);margin-bottom:5px}
-.ann .b{font-size:14px;color:#3d3230;white-space:pre-wrap}
-.grid{display:grid;gap:14px}
-@media(min-width:680px){.grid.two{grid-template-columns:1fr 1fr}}
-.mine{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:11px}
-.mine .h{background:var(--accent);padding:9px 14px;font-size:13px;color:var(--primary);
-  font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.mine .b{padding:13px 14px}
-.kv{display:flex;font-size:13.5px;line-height:2}
-.kv span{color:var(--muted);width:66px;flex:none}
-.idcard{background:linear-gradient(160deg,#890c25,#6d0a1e);color:#fff;border-radius:8px;
-  padding:20px;text-align:center}
-.idcard .nm{font-family:"Noto Serif TC",serif;font-size:19px;letter-spacing:2px}
-.idcard .no{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;
-  color:rgba(255,255,255,.7);letter-spacing:1px;margin-bottom:14px}
-.idcard img,.idcard .qrbox{background:#fff;padding:8px;border-radius:5px;display:inline-block}
-.idcard .tip{font-size:11.5px;color:rgba(255,255,255,.62);margin-top:11px;line-height:1.6}
-footer{text-align:center;font-size:12px;color:var(--muted);letter-spacing:1px;padding:0 0 32px}
+body{font-size:14px;line-height:1.65;
+  background-color:#faf6f2;
+  background-image:linear-gradient(rgba(137,12,37,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(137,12,37,.035) 1px,transparent 1px);
+  background-size:28px 28px}
+input,select,textarea{font-size:13.5px;padding:8px 10px}
+
+/* ---- 頂端導覽列 ---- */
+.topnav{background:var(--primary);color:#fff;padding:0 22px;height:52px;display:flex;align-items:center;gap:18px}
+.topnav .brand{line-height:1.15;margin-right:auto}
+.topnav .brand small{display:block;font-size:10.5px;letter-spacing:1px;color:rgba(255,255,255,.7)}
+.topnav .brand b{font-family:"Noto Serif TC",serif;font-size:14.5px;letter-spacing:1px}
+.topnav nav{display:flex;gap:14px;font-size:13.5px}
+.topnav nav a{color:rgba(255,255,255,.82);text-decoration:none;cursor:pointer;white-space:nowrap}
+.topnav nav a:hover,.topnav nav a.on{color:#fff;font-weight:700}
+.topnav .who{font-size:12px;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:8px}
+.topnav .pill{background:rgba(255,255,255,.18);padding:2px 9px;border-radius:99px;font-size:11.5px}
+
+.page{max-width:1040px;margin:0 auto;padding:26px 22px 70px}
+.crumb{font-size:12.5px;color:var(--muted);margin-bottom:4px}
+.crumb a{color:var(--muted);cursor:pointer;text-decoration:none}
+.crumb a:hover{color:var(--primary)}
+h1.pt{font-family:"Noto Serif TC",serif;font-size:24px;letter-spacing:1px;margin:0 0 2px}
+.pt-sub{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+.rule{border:0;border-top:1px solid var(--line);margin:0 0 18px}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+
+.bar{background:#fbf3e4;border:1px solid #ecd9ae;border-radius:5px;padding:9px 14px;font-size:12.5px;color:#7a6320;margin-bottom:20px}
+.bar b{color:#5c4a12}
+.bar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#d29a1f;margin-right:8px;vertical-align:1px}
+.bar.ok{background:#eaf4ee;border-color:#c7e0d0;color:#2b5e42}.bar.ok .dot{background:#2f8a5b}
+
+.grp{font-size:12.5px;color:var(--muted);letter-spacing:1px;display:flex;align-items:center;gap:12px;margin:22px 0 12px}
+.grp:after{content:"";flex:1;border-top:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.mcard{background:linear-gradient(180deg,#fffdfb,#f9f1eb);border:1px solid var(--line);border-radius:6px;padding:16px 16px 14px;
+  cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s;text-decoration:none;color:inherit;display:block}
+.mcard:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(80,20,30,.08);border-color:#cfb0b0}
+.mcard .ic{width:30px;height:30px;border-radius:6px;background:#f3e9e4;display:flex;align-items:center;justify-content:center;color:var(--primary)}
+.mcard .ic svg{width:15px;height:15px}
+.mcard .arr{position:absolute;right:14px;top:14px;color:#c9b3ac;font-size:13px}
+.mcard .num{font-family:"Noto Serif TC",serif;font-size:24px;font-weight:700;color:var(--primary);margin-top:12px;line-height:1.15;min-height:28px}
+.mcard .num.dim{color:#c9b3ac;font-size:13px;font-weight:400}
+.mcard .t{font-family:"Noto Serif TC",serif;font-weight:700;font-size:14px;margin-top:2px}
+.mcard .s{font-size:11.5px;color:var(--muted);margin-top:1px}
+.mcard .badge{position:absolute;right:16px;top:44px;width:7px;height:7px;border-radius:50%;background:#d29a1f}
+
+.today{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.today .n{font-family:"Noto Serif TC",serif;font-weight:700;font-size:15px}
+.today .m{font-size:12px;color:var(--muted)}
+.today .sp{flex:1}
+.today .cnt{font-size:12.5px;color:var(--muted)}
+.grp .lk{font-size:12px;color:var(--primary);cursor:pointer;margin-left:auto}
+
+/* ---- 通用表格 ---- */
+.card.flush{padding:0;background:#fff}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:11px 16px;border-bottom:1px solid var(--line-soft)}
+.toolbar input[type=text]{max-width:210px}.toolbar select{width:auto;min-width:112px}.toolbar .sp{flex:1}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#fbf8f7;text-align:left;font-size:11.5px;letter-spacing:.5px;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:700;cursor:pointer;user-select:none}
+th:hover{color:var(--primary)}th.nosort{cursor:default}th.nosort:hover{color:var(--muted)}
+td{padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle;white-space:nowrap}
+tbody tr:hover{background:#fdfbfa}
+td.wrap{white-space:normal;min-width:190px;color:var(--text-2);max-width:320px}
+td.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--muted)}
+.pager{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;font-size:12.5px;color:var(--muted);flex-wrap:wrap;gap:8px}
+.pager .pg{display:flex;gap:5px}
+.pager .pg button{border:1px solid var(--line);background:#fff;color:var(--text-2);font-family:inherit;font-size:12.5px;min-width:28px;padding:2px 7px;border-radius:4px;cursor:pointer}
+.pager .pg button.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.fr{display:grid;gap:13px;grid-template-columns:1fr 1fr}.fr .full{grid-column:1/-1}
+
+/* ---- 公告 ---- */
+.sec-t{font-family:"Noto Serif TC",serif;font-size:15px;font-weight:700;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-t .cnt{background:#fbf1e0;color:#9a6414;font-size:11px;padding:1px 8px;border-radius:99px;font-weight:400}
+.dashed{border:1.5px dashed var(--line);border-radius:6px;padding:26px;text-align:center;color:var(--muted);font-size:13px;background:#fff}
+.acard{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px 12px 14px;margin-bottom:9px;display:flex;gap:12px;align-items:flex-start}
+.acard .clock{color:#c9b3ac;flex:none;margin-top:3px}
+.acard .clock svg{width:15px;height:15px}
+.acard .main{flex:1;min-width:0}
+.acard .t{font-family:"Noto Serif TC",serif;font-weight:700;font-size:14.5px;margin-bottom:3px}
+.acard .m{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+.acard .m b{color:var(--text-2);font-weight:500}
+.acard .act{display:flex;gap:8px;align-items:center;flex:none}
+.acard .lnk{font-size:12.5px;color:var(--muted);cursor:pointer}
+.acard .lnk:hover{color:var(--primary)}
+.acard.sent{opacity:.75}
+
+.ed .lbl{font-size:13.5px;font-weight:700;margin:18px 0 8px}
+.ed .lbl small{font-weight:400;color:var(--muted);margin-left:6px}
+.opt{border:1px solid var(--line);border-radius:6px;padding:11px 14px;margin-bottom:8px;background:#fff;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.opt.on{border-color:var(--primary);background:var(--primary-soft)}
+.opt input{width:auto;margin-top:3px}
+.opt .t{font-size:14px}.opt .s{font-size:12px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px;font-size:12.5px;cursor:pointer;color:var(--text-2)}
+.chip:hover{border-color:var(--primary);color:var(--primary)}
+.plist{border:1px solid var(--line);border-radius:6px;background:#fff;max-height:220px;overflow-y:auto;padding:4px 0}
+.plist label{display:flex;align-items:center;gap:9px;padding:6px 12px;font-size:13.5px;font-weight:400;color:var(--text);margin:0;cursor:pointer}
+.plist label:hover{background:#fdf7f4}
+.plist input{width:auto}
+.plist .tag{margin-left:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.two .h{font-size:12px;color:var(--muted);margin-bottom:5px}
+.vars{font-size:11.5px;color:var(--muted);margin-top:6px}
+.vars code{background:var(--accent);padding:1px 5px;border-radius:3px}
+.slist{border:1px solid var(--line);border-radius:6px;background:#fff;max-height:210px;overflow-y:auto;padding:4px 0}
+.slist label{display:flex;align-items:center;gap:9px;padding:6px 12px;font-size:13.5px;font-weight:400;color:var(--primary);margin:0;cursor:pointer}
+.slist label:hover{background:#fdf7f4}
+.slist input{width:auto}
+.slist small{color:var(--muted);margin-left:auto;font-size:11.5px}
+.sendrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+
+@media(max-width:760px){
+  .topnav{padding:0 14px;gap:10px}.topnav nav{display:none}
+  .page{padding:18px 14px 60px}.two{grid-template-columns:1fr}.fr{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="hd">
-    <div class="brand" id="brand">　<small id="brandEn">　</small></div>
-    <a class="logout" onclick="doLogout()">登出</a>
+<div id="loading" class="loading">載入中⋯⋯</div>
+
+<div id="shell" style="display:none">
+  <div class="topnav">
+    <div class="brand"><small id="brandSmall">　</small><b>禪修課程活動報名系統</b></div>
+    <nav id="topnav"></nav>
+    <div class="who"><span class="pill">管理員</span><span id="me">　</span>
+      <a class="logout" style="color:#fff" href="index.html">報名頁</a>
+      <a class="logout" style="color:#fff" onclick="doLogout()">登出</a></div>
   </div>
-  <nav id="nav"></nav>
-</header>
-<div id="adminBar" hidden style="background:#fbf1e0;border-bottom:1px solid #ecd9ae;padding:10px 16px;text-align:center;font-size:13.5px;color:#7a6320">
-  你目前是以<b>管理員</b>身分登入 —— 這一頁是給學員報名用的。
-  <a href="admin.html" style="display:inline-block;margin-left:10px;padding:4px 14px;background:var(--primary);color:#fff;border-radius:99px;text-decoration:none;font-weight:500">前往後台管理 →</a>
+  <div class="page" id="body"></div>
 </div>
-
-<main>
-  <div id="loading" class="loading">載入中⋯⋯</div>
-
-  <div id="app" style="display:none">
-    <section class="view on" data-v="courses">
-      <h1>禪修課程</h1>
-      <p class="lead">選擇適合您的課程報名。初次參加建議從入門課程開始。</p>
-      <div id="courseList"></div>
-    </section>
-
-    <section class="view" data-v="ceremonies">
-      <h1>法會報名</h1>
-      <p class="lead">隨喜參加，共沾法益。</p>
-      <div id="ceremonyList"></div>
-    </section>
-
-    <section class="view" data-v="bulletin">
-      <h1>公告欄</h1>
-      <p class="lead">寺方最新消息與課程通知。</p>
-      <div id="annList"></div>
-    </section>
-
-    <section class="view" data-v="mine">
-      <h1>我的報名</h1>
-      <p class="lead">輸入報名時使用的 Email，即可查詢紀錄、取消報名、顯示學員證。</p>
-      <div class="card">
-        <label>Email</label>
-        <div style="display:flex;gap:9px">
-          <input id="myEmail" type="email" placeholder="your@email.com"
-                 onkeydown="if(event.key==='Enter')lookupMine()">
-          <button class="btn" id="myBtn" onclick="lookupMine()">查詢</button>
-        </div>
-      </div>
-      <div id="mineResult"></div>
-    </section>
-  </div>
-</main>
-
-<footer>南無本師釋迦牟尼佛</footer>
 
 <div class="mask" id="mask" onclick="if(event.target===this)closeM()">
   <div class="modal">
-    <div class="mh"><b id="mTitle">報名</b><button class="x" onclick="closeM()">&times;</button></div>
-    <div class="mb">
-      <div id="mMsg" class="msg error"></div>
-      <div class="meta" id="mSummary" style="margin-bottom:16px"></div>
-      <div class="f">
-        <label>Email<span class="r">*</span></label>
-        <input id="mEmail" type="email" oninput="deb()">
-        <div class="hint">報名過的話，填完會自動帶出上次的資料。</div>
-        <div class="autofill" id="mAuto"></div>
-      </div>
-      <div class="row two">
-        <div class="f"><label>姓名<span class="r">*</span></label><input id="mName"></div>
-        <div class="f"><label>聯絡電話</label><input id="mPhone" type="tel"></div>
-      </div>
-      <div class="f" id="mExtraWrap" style="display:none">
-        <label>附薦／消災（選填）</label>
-        <textarea id="mExtra" placeholder="每行一位，例如：　陽上　王小明"></textarea>
-      </div>
-      <div class="f"><label>備註</label><textarea id="mNote"
-        placeholder="有任何需要寺方知道的事，寫在這裡（選填）"></textarea></div>
-      <button class="btn block big" id="mBtn" onclick="submitSignup()">送 出 報 名</button>
+    <div class="mh"><b id="mTitle">編輯</b><button class="x" onclick="closeM()">&times;</button></div>
+    <div class="mb"><div id="mMsg" class="msg error"></div><div class="fr" id="mForm"></div></div>
+    <div class="mf">
+      <button class="btn grey" id="delBtn" onclick="delRec()" style="margin-right:auto;display:none">刪除</button>
+      <button class="btn grey" onclick="closeM()">取消</button>
+      <button class="btn" id="saveBtn" onclick="saveRec()">儲存</button>
     </div>
   </div>
 </div>
 
-
 <!-- ===== 登入畫面 ===== -->
 <div class="login-mask" id="loginMask">
   <form class="login-box" onsubmit="doLogin();return false;">
-    <div class="login-title">佛寶寺</div>
-    <div class="login-sub">禪 修 課 程 報 名</div>
+    <div class="login-title" id="loginTitle">　</div>
+    <div class="login-sub">後 台 管 理</div>
     <div id="loginMsg" class="msg error"></div>
     <div class="f"><label>帳號</label><input id="lgUser" autocomplete="username" autocapitalize="off"></div>
     <div class="f"><label>密碼</label><input id="lgPass" type="password" autocomplete="current-password"></div>
     <button type="submit" class="btn block big" id="lgBtn">登 入</button>
-    <div class="hint" style="text-align:center;margin-top:12px">學員帳號：<code>学员</code>　密碼：<code>0000</code></div>
+    <div class="hint" style="text-align:center;margin-top:12px">管理員帳號：<code>admin</code>　密碼：<code>0000</code></div>
   </form>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-var D = null, cur = null, debT = null, lastMail = '';
-
-var TABS = [['courses','禪修課程'],['ceremonies','法會報名'],
-            ['bulletin','公告欄'],['mine','我的報名']];
-
-var NEED_ROLE = null;   // 報名頁：學員或管理員都可以
+var BOOT = null, MOD = {}, DATA = {}, ST = {}, CUR = null, EDIT = null, COUNTS = {};
+var NEED_ROLE = '管理員';
 
 /* ================= 登入（帳號密碼存在試算表「帳號」分頁） ================= */
 var TK = '';
 try { TK = sessionStorage.getItem('tk') || ''; } catch (e) {}
-
-/** 所有後端呼叫都走這裡：帶著 token 給 call()，未登入／逾時就跳登入畫面 */
 function rpc(fn, args, ok, fail) {
   google.script.run.withSuccessHandler(ok || function () {}).withFailureHandler(function (e) {
     var m = (e && e.message) || String(e);
@@ -193,260 +192,494 @@ function showLogin(msg) {
 function hideLogin() { document.getElementById('loginMask').classList.remove('on'); }
 function lgErr(m) { var el = document.getElementById('loginMsg'); el.textContent = m; el.classList.add('on'); }
 function doLogin() {
-  var u = document.getElementById('lgUser').value.trim();
-  var p = document.getElementById('lgPass').value;
+  var u = document.getElementById('lgUser').value.trim(), p = document.getElementById('lgPass').value;
   if (!u || !p) return lgErr('請輸入帳號與密碼');
   var b = document.getElementById('lgBtn'); b.disabled = true; b.textContent = '登入中⋯⋯';
   google.script.run.withSuccessHandler(function (r) {
     b.disabled = false; b.textContent = '登 入';
     if (!r.ok) return lgErr(r.message);
     if (NEED_ROLE && r.role !== NEED_ROLE) return lgErr('這個帳號沒有後台權限（需要管理員帳號）');
-    TK = r.token; try { sessionStorage.setItem('tk', TK); sessionStorage.setItem('role', r.role); } catch (e) {}
+    TK = r.token; try { sessionStorage.setItem('tk', TK); } catch (e) {}
     document.getElementById('lgPass').value = '';
     hideLogin(); start();
-  }).withFailureHandler(function (e) {
-    b.disabled = false; b.textContent = '登 入'; lgErr('登入失敗：' + e.message);
-  }).login(u, p);
+  }).withFailureHandler(function (e) { b.disabled = false; b.textContent = '登 入'; lgErr('登入失敗：' + e.message); })
+  .login(u, p);
 }
 function doLogout() {
-  var t = TK; TK = ''; try { sessionStorage.removeItem('tk'); sessionStorage.removeItem('role'); } catch (e) {}
+  var t = TK; TK = ''; try { sessionStorage.removeItem('tk'); } catch (e) {}
   try { google.script.run.logout(t); } catch (e) {}
   try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('c:') === 0) localStorage.removeItem(k); }); } catch (e) {}
   location.reload();
 }
 window.addEventListener('load', function () { if (!TK) showLogin(); else start(); });
 
-function showAdminBar() {
-  var role = ''; try { role = sessionStorage.getItem('role') || ''; } catch (e) {}
-  document.getElementById('adminBar').hidden = (role !== '管理員');
-}
-
-/* ---------- 啟動：跟後端要資料 ---------- */
+/* ================= 啟動 ================= */
 function start() {
-  var cached = lsGet('pub'); if (cached) boot(cached);          // 先畫上次的
-  rpc('getPublicData', [], function (d) { lsSet('pub', d); boot(d); }, function (e) {
-    if (cached) return;
-      document.getElementById('loading').textContent = '載入失敗：' + e.message;
-    });
+  var cached = lsGet('adminBoot'); if (cached) boot(cached);   // 先畫上次的，背景再更新
+  rpc('adminBoot', [], function (b) { lsSet('adminBoot', b); if (!cached || CUR === 'dash') boot(b); else { BOOT = b; } }, function (e) {
+    if (!cached) document.getElementById('loading').innerHTML = '載入失敗：' + e.message;
+  });
 }
-
-function boot(d) {
-  D = d;
-  document.getElementById('brand').firstChild.nodeValue = d.temple;
-  document.getElementById('brandEn').textContent = d.templeEn;
-  document.getElementById('nav').innerHTML = TABS.map(function (t, i) {
-    return '<button class="' + (i ? '' : 'on') + '" data-k="' + t[0] + '">' + t[1] + '</button>';
-  }).join('');
-  renderCourses(); renderCeremonies(); renderAnn();
-  showAdminBar();
+function boot(b) {
+  BOOT = b;
+  b.modules.forEach(function (m) { MOD[m.key] = m; });
+  document.getElementById('brandSmall').textContent = b.temple;
+  document.getElementById('loginTitle').textContent = b.temple;
+  document.getElementById('me').textContent = b.me;
+  document.getElementById('topnav').innerHTML =
+    '<a data-k="dash" class="on" onclick="go(\'dash\')">首頁</a>' +
+    '<a data-k="courses" onclick="go(\'courses\')">課程</a>' +
+    '<a data-k="enrollments" onclick="go(\'enrollments\')">報名</a>' +
+    '<a data-k="ceremonies" onclick="go(\'ceremonies\')">法會</a>' +
+    '<a data-k="announce" onclick="go(\'announce\')">公告</a>' +
+    '<a data-k="checkin" onclick="go(\'checkin\')">簽到</a>';
   document.getElementById('loading').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+  document.getElementById('shell').style.display = 'block';
+  go('dash', b.dash);
+  rpc('adminCounts', [], function (c) { COUNTS = c; if (CUR === 'dash') paintCounts(); }, function () {});
 }
 
-document.getElementById('nav').addEventListener('click', function (e) {
-  var b = e.target.closest('button'); if (!b) return;
-  document.querySelectorAll('#nav button').forEach(function (x) {
-    x.classList.toggle('on', x === b); });
-  document.querySelectorAll('.view').forEach(function (x) {
-    x.classList.toggle('on', x.dataset.v === b.dataset.k); });
+/* ================= 路由 ================= */
+function go(k, pre) {
+  CUR = k;
+  document.querySelectorAll('#topnav a').forEach(function (a) { a.classList.toggle('on', a.dataset.k === k); });
+  if (MOD[k]) { loadTable(k); }
+  else if (k === 'dash') dash(pre);
+  else if (k === 'announce') announce();
+  else if (k === 'announceEdit') announceEdit(pre);
+  else if (k === 'analytics') analytics();
+  else if (k === 'checkin') checkin();
+  else if (k === 'settings') settings();
   window.scrollTo(0, 0);
-});
-
-/* ---------- 列表 ---------- */
-function meter(taken, cap) {
-  if (!cap) return '';
-  var pct = Math.min(100, Math.round(taken / cap * 100)), left = Math.max(0, cap - taken);
-  var cls = left === 0 ? 'full' : (left <= 5 ? 'hot' : '');
-  return '<div class="meter"><div class="bar"><div class="fill ' + cls +
-    '" style="width:' + pct + '%"></div></div><div class="lbl"><span>名額 ' + cap + ' 位</span>' +
-    (left === 0 ? '<span>已額滿</span>' : '<span>尚餘 <b>' + left + '</b> 位</span>') + '</div></div>';
 }
-function renderCourses() {
-  var box = document.getElementById('courseList');
-  if (!D.courses.length) { box.innerHTML = '<div class="empty">目前沒有開放報名的課程。</div>'; return; }
-  box.innerHTML = D.courses.map(function (c) {
-    return '<div class="item"><div class="item-top"><div>' +
-      '<h4>' + esc(c.name) + (c.sec ? '　' + esc(c.sec) : '') +
-        '<span class="tag' + (c.level === '進階' ? '' : ' info') + '">' + esc(c.level) + '</span>' +
-        (c.full ? '<span class="tag">已額滿</span>' : '') + '</h4>' +
-      '<div class="meta">' + esc(c.day) + '　·　' + esc(c.place) + '<br><b>' + esc(c.teacher) +
-        '</b> 主講　·　' + esc(c.start) + ' 開課，共 ' + c.weeks + ' 堂</div></div>' +
-      '<button class="btn' + (c.full ? ' grey' : '') + '" onclick="openM(\'' + c.id + '\',\'course\')">' +
-        (c.full ? '登記候補' : '我要報名') + '</button></div>' + meter(c.taken, c.cap) + '</div>';
-  }).join('');
-}
-function renderCeremonies() {
-  var box = document.getElementById('ceremonyList');
-  if (!D.ceremonies.length) { box.innerHTML = '<div class="empty">目前沒有開放報名的法會。</div>'; return; }
-  box.innerHTML = D.ceremonies.map(function (f) {
-    return '<div class="item"><div class="item-top"><div>' +
-      '<h4>' + esc(f.name) + (f.full ? '<span class="tag">已額滿</span>' : '') + '</h4>' +
-      '<div class="meta"><b>' + esc(f.date) + '</b> ' + esc(f.time) + '　·　' + esc(f.place) +
-        (f.desc ? '<br>' + esc(f.desc) : '') + '</div></div>' +
-      '<button class="btn' + (f.full ? ' grey' : '') + '" onclick="openM(\'' + f.id + '\',\'ceremony\')">' +
-        (f.full ? '登記候補' : '我要報名') + '</button></div>' + meter(f.taken, f.cap) + '</div>';
-  }).join('');
-}
-function renderAnn() {
-  var box = document.getElementById('annList');
-  box.innerHTML = D.announcements.length ? D.announcements.map(function (a) {
-    return '<div class="ann' + (a.pin ? ' pin' : '') + '"><div class="t">' + esc(a.title) +
-      (a.pin ? '<span class="tag">置頂</span>' : '') + '</div><div class="d">' + esc(a.date) +
-      '</div><div class="b">' + esc(a.body) + '</div>' +
-      (a.image ? '<div style="margin-top:10px"><a href="' + esc(a.image) + '" target="_blank" rel="noopener">' +
-        '<img src="' + esc(a.image) + '" alt="海報" loading="lazy" ' +
-        'style="max-width:100%;width:340px;height:auto;border:1px solid var(--line);border-radius:5px;display:block" ' +
-        'onerror="this.parentNode.parentNode.style.display=\'none\'"></a></div>' : '') +
-      '</div>';
-  }).join('') : '<div class="empty">目前沒有公告。</div>';
+function head(title, sub, crumbs, right) {
+  return '<div class="crumb">' + (crumbs || '').split('|').map(function (c, i, arr) {
+      var p = c.split('=');
+      return i === arr.length - 1 ? esc(p[0]) : '<a onclick="go(\'' + (p[1] || 'dash') + '\')">' + esc(p[0]) + '</a> / ';
+    }).join('') + '</div>' +
+    '<div class="ph"><div><h1 class="pt">' + esc(title) + '</h1><p class="pt-sub">' + esc(sub || '') + '</p></div>' +
+    (right || '') + '</div><hr class="rule">';
 }
 
-/* ---------- 報名 Modal ---------- */
-function openM(id, kind) {
-  var list = kind === 'course' ? D.courses : D.ceremonies;
-  cur = list.filter(function (x) { return x.id === id; })[0];
-  cur._kind = kind;
+/* ================= 儀表板（卡片） ================= */
+var ICONS = {
+  enrollments:'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/>',
+  students:'<path d="M12 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/><path d="M4 21v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1"/>',
+  courses:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  sessions:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  attendance:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+  makeup:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/>',
+  consult:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  volunteer:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  ceremonies:'<path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4.5L5.5 20l2-7L2 9h7z"/>',
+  ceremonySignups:'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/>',
+  announce:'<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>',
+  groups:'<circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M15 19a4 4 0 0 1 7 0"/>',
+  analytics:'<path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>',
+  checkin:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3M21 14v7h-7"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  accounts:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  mailQueue:'<path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/>'
+};
+function icon(k) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (ICONS[k] || ICONS.courses) + '</svg>'; }
+function mcard(k, title, sub, count, badge) {
+  var num = count == null ? '<div class="num dim" data-c="' + k + '">—</div>' : '<div class="num" data-c="' + k + '">' + count + '</div>';
+  return '<a class="mcard" onclick="go(\'' + k + '\')"><div class="ic">' + icon(k) + '</div><span class="arr">→</span>' +
+    (badge ? '<span class="badge"></span>' : '') + num + '<div class="t">' + esc(title) + '</div><div class="s">' + esc(sub) + '</div></a>';
+}
+function paintCounts() {
+  Object.keys(COUNTS).forEach(function (k) {
+    var el = document.querySelector('.num[data-c="' + k + '"]');
+    if (el) { el.textContent = COUNTS[k]; el.classList.remove('dim'); }
+  });
+}
+function dash(pre) {
+  if (pre) { renderDash(pre); return; }
+  document.getElementById('body').innerHTML = '<div class="loading">讀取中⋯⋯</div>';
+  rpc('adminDashboard', [], renderDash);
+}
+function renderDash(d) {
+  var t = d.tiles, cnt = COUNTS;
+  var cronOk = d.lastCron != null && d.lastCron <= 2;
+  var cron = d.lastCron == null
+    ? '<div class="bar"><span class="dot"></span>排程尚未安裝 —— 在編輯器執行一次 <b>installTriggers</b>，提醒信與排程公告才會自動寄出</div>'
+    : '<div class="bar' + (cronOk ? ' ok' : '') + '"><span class="dot"></span>提醒信排程最後成功執行：<b>' + d.lastCron + ' 小時前</b>' +
+      (cronOk ? '' : '　—　超過預期間隔，請檢查觸發條件') + '</div>';
+  var empty = (t.students === 0 && t.totalCourses === 0) ?
+    '<div class="bar"><span class="dot"></span>試算表目前是空的。到編輯器執行 <b>seedDemo</b> 可灌入示範資料，或先到「課程管理」新增課程。</div>' : '';
+  var today = d.todaySessions.length ? d.todaySessions.map(function (s) {
+    return '<div class="today"><div><div class="n">' + esc(s.course) + '</div><div class="m">' + esc(s.time || '') + '　第 ' + s.no + ' 堂　' + esc(s.topic || '') + '</div></div>' +
+      '<div class="sp"></div><div class="cnt">出席 ' + s.signed + ' / ' + s.expect + '</div>' +
+      '<a class="btn ghost sm" href="checkin.html">考勤</a></div>';
+  }).join('') : '<div class="today"><div class="m">今天沒有排課</div></div>';
 
-  document.getElementById('mTitle').textContent = cur.full ? '登記候補' : '報名';
-  document.getElementById('mSummary').innerHTML =
-    '<b class="serif" style="font-size:16px">' + esc(cur.name) + (cur.sec ? '　' + esc(cur.sec) : '') + '</b><br>' +
-    (kind === 'course' ? esc(cur.day) : esc(cur.date) + ' ' + esc(cur.time)) + '　·　' + esc(cur.place) +
-    (cur.full ? '<br><span class="tag warn">已額滿，送出後將列入候補名單</span>' : '');
-  document.getElementById('mExtraWrap').style.display =
-    (kind === 'ceremony' && cur.extra) ? 'block' : 'none';
-  document.getElementById('mBtn').textContent = cur.full ? '登 記 候 補' : '送 出 報 名';
+  document.getElementById('body').innerHTML =
+    head('後台管理', '管理課程、學員與系統設定', '後台管理') + cron + empty +
+    '<div class="grp">今日課堂<span class="lk" onclick="go(\'checkin\')">▣ 掃描簽到</span></div>' + today +
+    '<div class="grp">學員與報名</div><div class="cards">' +
+      mcard('enrollments', '報名管理', '查看與管理課程報名', cnt.enrollments) +
+      mcard('students', '用戶管理', '帳號、角色與個人資料', cnt.students) +
+      mcard('accounts', '登入帳號', '後台與學員登入密碼', cnt.accounts) + '</div>' +
+    '<div class="grp">課程</div><div class="cards">' +
+      mcard('courses', '課程管理', '建立與編輯課程', cnt.courses) +
+      mcard('sessions', '堂次管理', '每一堂課的日期與出席', cnt.sessions) +
+      mcard('attendance', '出席紀錄', '簽到明細', cnt.attendance) +
+      mcard('makeup', '補課預約', '補課名額與預約紀錄', cnt.makeup) +
+      mcard('consult', '小參預約', '一對一小參時段', cnt.consult) +
+      mcard('volunteer', '義工出坡', '培訓管理、資格授予、出坡班次', cnt.volunteer) + '</div>' +
+    '<div class="grp">法會</div><div class="cards">' +
+      mcard('ceremonies', '法會管理', '建立法會場次、查看報名人數', cnt.ceremonies) +
+      mcard('ceremonySignups', '法會報名', '法會報名名單', cnt.ceremonySignups) + '</div>' +
+    '<div class="grp">溝通</div><div class="cards">' +
+      mcard('announce', '公告管理', '立即發送或排程公告', d.pendingAnnounce, d.pendingAnnounce > 0) +
+      mcard('groups', '群組管理', '建立自定義收件群組', cnt.groups) +
+      mcard('mailQueue', '郵件佇列', '超過每日配額的信排在這裡', d.mailPending) + '</div>' +
+    '<div class="grp">作業</div><div class="cards">' +
+      mcard('analytics', '數據分析', '報名趨勢與出席率統計', null) +
+      mcard('checkin', '掃描學員證簽到', '用掃碼機快速登記考勤', null) +
+      mcard('settings', '系統設定', '網址、排程與資料庫', null) + '</div>';
+  paintCounts();
+}
 
-  ['mEmail','mName','mPhone','mNote','mExtra'].forEach(function (i) {
-    document.getElementById(i).value = ''; });
-  document.getElementById('mAuto').classList.remove('on');
+/* ================= 通用表格 ================= */
+var FETCHED = {};
+function loadTable(k, force) {
+  if (!ST[k]) ST[k] = {q:'', f:'', page:1, sort:null, dir:1};
+  // 兩分鐘內看過的資料直接用，不再跑一趟 Google（按「重新整理」才強制重讀）
+  if (!force && DATA[k] && Date.now() - (FETCHED[k] || 0) < 120000) { renderTable(k); return; }
+  document.getElementById('body').innerHTML = head(MOD[k].title, MOD[k].sub, '後台=dash|' + MOD[k].title) + '<div class="loading">讀取試算表⋯⋯</div>';
+  rpc('adminList', [k], function (rows) {
+    DATA[k] = rows; FETCHED[k] = Date.now();
+    renderTable(k);
+  }, function (e) { document.getElementById('body').innerHTML += '<div class="empty">讀取失敗：' + e.message + '</div>'; });
+}
+function renderTable(k) {
+  var m = MOD[k], st = ST[k];
+  var sf = m.fields.filter(function (f) { return f.k === 'status'; })[0];
+  var filter = sf ? '<select onchange="ST[\'' + k + '\'].f=this.value;ST[\'' + k + '\'].page=1;paint(\'' + k + '\')"><option value="">全部狀態</option>' +
+    sf.opts.map(function (o) { return '<option' + (st.f === o ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select>' : '';
+  document.getElementById('body').innerHTML =
+    head(m.title, m.sub, '後台=dash|' + m.title, '<button class="btn" onclick="edit(\'' + k + '\',null)">＋ 新增</button>') +
+    '<div class="card flush"><div class="toolbar">' +
+      '<input type="text" placeholder="搜尋…" value="' + esc(st.q) + '" oninput="ST[\'' + k + '\'].q=this.value;ST[\'' + k + '\'].page=1;paint(\'' + k + '\')">' + filter +
+      '<span class="sp"></span><button class="btn ghost sm" onclick="exportCsv(\'' + k + '\')">匯出 CSV</button>' +
+      '<button class="btn ghost sm" onclick="loadTable(\'' + k + '\', true)">重新整理</button></div>' +
+    '<div class="tw"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div><div class="pager" id="pager"></div></div>' +
+    '<div class="note" style="margin-top:14px">這張表直接讀寫試算表的「<b>' + esc(SHEETNAME(k)) + '</b>」分頁，兩邊改都會同步。</div>';
+  paint(k);
+}
+function SHEETNAME(k) {
+  var n = {students:'學員', enrollments:'報名', courses:'課程', sessions:'堂次', attendance:'出席', makeup:'補課預約', consult:'小參預約',
+    volunteer:'義工', ceremonies:'法會', ceremonySignups:'法會報名', announcements:'公告', groups:'群組', mailQueue:'郵件佇列', accounts:'帳號'};
+  return n[k] || k;
+}
+function filtered(k) {
+  var m = MOD[k], st = ST[k], rows = (DATA[k] || []).slice(), q = st.q.trim().toLowerCase();
+  rows = rows.filter(function (r) {
+    if (st.f && r.status !== st.f) return false;
+    if (!q) return true;
+    return m.fields.some(function (f) { return String(r[f.k] == null ? '' : r[f.k]).toLowerCase().indexOf(q) >= 0; });
+  });
+  if (st.sort) rows.sort(function (a, b) {
+    var x = a[st.sort], y = b[st.sort], nx = Number(x), ny = Number(y);
+    if (!isNaN(nx) && !isNaN(ny) && x !== '' && y !== '') return (nx - ny) * st.dir;
+    return String(x).localeCompare(String(y), 'zh-Hant') * st.dir;
+  });
+  return rows;
+}
+function paint(k) {
+  var m = MOD[k], st = ST[k], rows = filtered(k), cols = m.fields.filter(function (f) { return !f.hide; });
+  var per = 14, pages = Math.max(1, Math.ceil(rows.length / per));
+  if (st.page > pages) st.page = pages;
+  var slice = rows.slice((st.page - 1) * per, st.page * per);
+  document.getElementById('th').innerHTML = '<tr>' + cols.map(function (f) {
+    return '<th onclick="sortBy(\'' + k + '\',\'' + f.k + '\')">' + f.l + (st.sort === f.k ? (st.dir > 0 ? ' ↑' : ' ↓') : '') + '</th>';
+  }).join('') + '<th class="nosort" style="width:64px">操作</th></tr>';
+  document.getElementById('tb').innerHTML = slice.length ? slice.map(function (r) {
+    return '<tr>' + cols.map(function (f) {
+      var v = r[f.k] == null ? '' : r[f.k];
+      if (f.tags) return '<td><span class="tag ' + (f.tags[v] || '') + '">' + esc(v) + '</span></td>';
+      return '<td class="' + (f.mono ? 'mono' : '') + (f.wrap ? ' wrap' : '') + '">' + esc(v) + '</td>';
+    }).join('') + '<td><button class="btn ghost sm" onclick="edit(\'' + k + '\',\'' + r.id + '\')">編輯</button></td></tr>';
+  }).join('') : '<tr><td colspan="' + (cols.length + 1) + '"><div class="empty">沒有符合的資料</div></td></tr>';
+  var pg = '', from = Math.max(1, st.page - 2), to = Math.min(pages, from + 4); from = Math.max(1, to - 4);
+  if (st.page > 1) pg += '<button onclick="setPage(\'' + k + '\',' + (st.page - 1) + ')">‹</button>';
+  for (var i = from; i <= to; i++) pg += '<button class="' + (i === st.page ? 'on' : '') + '" onclick="setPage(\'' + k + '\',' + i + ')">' + i + '</button>';
+  if (st.page < pages) pg += '<button onclick="setPage(\'' + k + '\',' + (st.page + 1) + ')">›</button>';
+  document.getElementById('pager').innerHTML = '<span>共 ' + rows.length + ' 筆' + ((st.q || st.f) ? '（已篩選，全部 ' + (DATA[k] || []).length + ' 筆）' : '') +
+    '　第 ' + st.page + ' / ' + pages + ' 頁</span><div class="pg">' + pg + '</div>';
+}
+function setPage(k, p) { ST[k].page = p; paint(k); }
+function sortBy(k, f) { var s = ST[k]; if (s.sort === f) s.dir *= -1; else { s.sort = f; s.dir = 1; } paint(k); }
+function edit(k, id) {
+  var m = MOD[k], r = id ? (DATA[k] || []).filter(function (x) { return String(x.id) === String(id); })[0] : {};
+  if (!r) return toast('找不到這筆資料');
+  EDIT = {k:k, id:id};
+  document.getElementById('mTitle').textContent = (id ? '編輯　' : '新增　') + m.title;
+  document.getElementById('delBtn').style.display = id ? 'block' : 'none';
   document.getElementById('mMsg').classList.remove('on');
-  lastMail = '';
+  document.getElementById('mForm').innerHTML = m.fields.map(function (f) {
+    var v = r[f.k] == null ? '' : r[f.k], cls = (f.type === 'textarea' || f.wrap) ? ' class="full"' : '', dis = f.ro ? ' disabled' : '', ctl;
+    if (f.type === 'select') ctl = '<select data-k="' + f.k + '"' + dis + '>' + (f.opts || []).map(function (o) { return '<option' + (String(o) === String(v) ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select>';
+    else if (f.type === 'textarea') ctl = '<textarea data-k="' + f.k + '"' + dis + '>' + esc(v) + '</textarea>';
+    else ctl = '<input data-k="' + f.k + '" type="' + (f.type === 'number' ? 'number' : 'text') + '" value="' + esc(v) + '"' + dis + '>';
+    return '<div' + cls + '><label>' + f.l + (f.req ? '<span class="r">*</span>' : '') + (f.ro ? '　<span style="font-weight:400">（唯讀）</span>' : '') + '</label>' + ctl + '</div>';
+  }).join('');
   document.getElementById('mask').classList.add('on');
 }
 function closeM() { document.getElementById('mask').classList.remove('on'); }
+function saveRec() {
+  var m = MOD[EDIT.k], rec = {};
+  document.querySelectorAll('#mForm [data-k]').forEach(function (el) { if (!el.disabled) rec[el.dataset.k] = el.value; });
+  if (EDIT.id) rec.id = EDIT.id;
+  var miss = m.fields.filter(function (f) { return f.req && !f.ro && !String(rec[f.k] || '').trim(); })[0];
+  if (miss) { var e = document.getElementById('mMsg'); e.textContent = '請填寫「' + miss.l + '」'; e.classList.add('on'); return; }
+  var b = document.getElementById('saveBtn'); b.disabled = true; b.textContent = '儲存中⋯⋯';
+  rpc('adminSave', [EDIT.k, rec], function (r) {
+    b.disabled = false; b.textContent = '儲存';
+    if (!r.ok) { var e2 = document.getElementById('mMsg'); e2.textContent = r.message; e2.classList.add('on'); return; }
+    closeM(); toast('✓ 已寫入 Google Sheet'); loadTable(EDIT.k, true);
+  }, function (er) { b.disabled = false; b.textContent = '儲存'; var e3 = document.getElementById('mMsg'); e3.textContent = '儲存失敗：' + er.message; e3.classList.add('on'); });
+}
+function delRec() {
+  if (!confirm('確定要刪除這筆資料嗎？\n這會直接刪掉試算表裡的那一列，無法復原。')) return;
+  rpc('adminDelete', [EDIT.k, EDIT.id], function (r) { if (!r.ok) return toast(r.message); closeM(); toast('✓ 已刪除'); loadTable(EDIT.k, true); });
+}
+function exportCsv(k) {
+  var m = MOD[k], rows = filtered(k), cols = m.fields;
+  var csv = '﻿' + cols.map(function (f) { return q(f.l); }).join(',') + '\n' +
+    rows.map(function (r) { return cols.map(function (f) { return q(r[f.k] == null ? '' : r[f.k]); }).join(','); }).join('\n');
+  var a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); a.download = m.title + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); toast('✓ 已下載 ' + rows.length + ' 筆');
+}
+function q(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }
 
-/* ★ 自動帶出資料：停止打字 0.6 秒後去查 Google Sheet */
-function deb() { clearTimeout(debT); debT = setTimeout(autofill, 600); }
-function autofill() {
-  var e = document.getElementById('mEmail').value.trim().toLowerCase();
-  if (!e || e.indexOf('@') < 0 || e === lastMail) return;
-  lastMail = e;
-  rpc('lookupStudent', [e], function (s) {
-    var box = document.getElementById('mAuto');
-    if (!s) { box.classList.remove('on'); return; }
-    if (!document.getElementById('mName').value)  document.getElementById('mName').value  = s.name || '';
-    if (!document.getElementById('mPhone').value) document.getElementById('mPhone').value = s.phone || '';
-    box.textContent = '歡迎回來，' + s.name + (s.no ? '（學號 ' + s.no + '）' : '') + '　已帶出您上次的資料';
-    box.classList.add('on');
-  }, function () {});
+/* ================= 公告管理 ================= */
+var AN = null;
+function announce() {
+  document.getElementById('body').innerHTML = head('公告管理', '立即發送或排程公告', '後台=dash|公告管理') + '<div class="loading">讀取中⋯⋯</div>';
+  rpc('announceBoot', [], function (a) { AN = a; renderAnnounce(); });
+}
+function clockIcon() { return '<span class="clock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>'; }
+function renderAnnounce() {
+  var list = AN.list.slice().reverse();
+  var board = list.filter(function (a) { return a.status === '已發布'; });
+  var pending = list.filter(function (a) { return a.status === '排程中'; }).sort(function (x, y) { return String(x.sendAt).localeCompare(String(y.sendAt)); });
+  var done = list.filter(function (a) { return a.status === '已寄出' || a.status === '失敗' || a.status === '已取消' || a.status === '草稿'; }).slice(0, 15);
+
+  function card(a, kind) {
+    var tgt = a.to === '課程學員' ? esc(a.course || '') : (a.to === '手動名單' ? '手動名單' : a.to);
+    var cnt = a.to === '手動名單' ? String(a.recipients || '').split(/[,\n;]+/).filter(Boolean).length
+            : a.to === '課程學員' ? ((AN.courses.filter(function (c) { return c.id === a.courseId; })[0] || {}).count || 0)
+            : a.to === '全體學員' ? AN.totalStudents : 0;
+    var meta = '<span><b>' + tgt + '</b></span>' + (a.to !== '僅公告欄' ? '<span>' + (a.status === '已寄出' ? '已寄 ' + (a.sentCount || 0) : '將寄 ' + cnt) + ' 位</span>' : '') +
+      (a.sendAt ? '<span>' + (a.status === '已寄出' ? '寄出' : '發送') + '：' + esc(a.sendAt) + (a.hoursBefore && a.sessionId ? '（課前 ' + a.hoursBefore + ' 小時）' : '') + '</span>' : '') +
+      (a.image ? '<span>🖼 含海報</span>' : '') +
+      '<span>建立者：' + esc(a.createdBy || '') + '</span><span class="tag ' + ({'已發布':'ok','已寄出':'ok','排程中':'info','失敗':'err'}[a.status] || '') + '">' + esc(a.status) + '</span>';
+    var act = kind === 'pending'
+      ? '<span class="lnk" onclick="go(\'announceEdit\',\'' + a.id + '\')">編輯</span><button class="btn ghost sm" onclick="cancelAnn(\'' + a.id + '\')">取消排程</button>'
+      : kind === 'board' ? '<span class="lnk" onclick="go(\'announceEdit\',\'' + a.id + '\')">編輯</span><button class="btn ghost sm" onclick="cancelAnn(\'' + a.id + '\')">下架</button>'
+      : '<span class="lnk" onclick="go(\'announceEdit\',\'' + a.id + '\')">再用一次</span>';
+    return '<div class="acard' + (kind === 'done' ? ' sent' : '') + '">' + clockIcon() + '<div class="main"><div class="t">' + esc(a.title || a.titleEn) + '</div><div class="m">' + meta + '</div></div><div class="act">' + act + '</div></div>';
+  }
+  document.getElementById('body').innerHTML =
+    head('公告管理', '立即發送或排程公告', '後台=dash|公告管理', '<button class="btn" onclick="go(\'announceEdit\',null)">＋ 新增公告</button>') +
+    '<div class="sec-t">進行中的公告 <small style="font-weight:400;color:var(--muted)">（顯示在報名頁公告欄）</small></div>' +
+    (board.length ? board.map(function (a) { return card(a, 'board'); }).join('') : '<div class="dashed">目前無進行中的公告</div>') +
+    '<div class="sec-t">待發排程（課程公告）<span class="cnt">' + pending.length + '</span></div>' +
+    (pending.length ? pending.map(function (a) { return card(a, 'pending'); }).join('') : '<div class="dashed">沒有排程中的公告</div>') +
+    (done.length ? '<div class="sec-t">最近寄出 / 其他</div>' + done.map(function (a) { return card(a, 'done'); }).join('') : '') +
+    '<div class="note" style="margin-top:18px">排程公告由每小時的排程檢查寄出，實際寄出時間會在設定時間之後 0–60 分鐘內。私人 Gmail 每天 100 封，超過的會排隊隔天補寄。</div>';
+}
+function cancelAnn(id) {
+  if (!confirm('確定要取消這則公告嗎？')) return;
+  rpc('announceCancel', [id], function (r) { if (!r.ok) return toast(r.message); toast('✓ 已取消'); announce(); });
 }
 
-function submitSignup() {
-  var email = document.getElementById('mEmail').value.trim();
-  var name  = document.getElementById('mName').value.trim();
-  if (!email || email.indexOf('@') < 0) return mErr('請填寫正確的 Email。');
-  if (!name) return mErr('請填寫姓名。');
+/* ---------- 編輯 / 新增 ---------- */
+var ED = null;
+function announceEdit(id) {
+  if (!AN) { rpc('announceBoot', [], function (a) { AN = a; announceEdit(id); }); return; }
+  var a = id ? AN.list.filter(function (x) { return x.id === id; })[0] : null;
+  var reuse = a && (a.status === '已寄出' || a.status === '已取消' || a.status === '失敗');
+  ED = {id: reuse ? null : (a ? a.id : null), to: a ? a.to : '全體學員', courseId: a ? a.courseId : '', sessionId: a ? a.sessionId : '',
+        hoursBefore: a ? (a.hoursBefore || 36) : 36, recipients: a ? String(a.recipients || '').split(/[,\n;]+/).filter(Boolean) : [],
+        image: a ? (a.image || '') : '', imageId: a ? (a.imageId || '') : ''};
+  document.getElementById('body').innerHTML =
+    head(id && !reuse ? '編輯排程公告' : '新增公告', '', '後台=dash|公告管理=announce|' + (id && !reuse ? '編輯排程' : '新增')) +
+    '<div class="ed">' +
+    '<div class="lbl">收件對象</div><div id="toOpts"></div>' +
+    '<div id="courseSel" style="display:none;margin:8px 0 0"><select id="edCourse" onchange="ED.courseId=this.value;drawPeople()">' +
+      AN.courses.map(function (c) { return '<option value="' + c.id + '">' + esc(c.label) + '（' + c.count + ' 位）</option>'; }).join('') + '</select></div>' +
+    '<div id="manual" style="display:none;margin-top:8px"><div class="chips">' +
+      '<span class="chip" onclick="pickAll(true)">全選（' + AN.students.length + '）</span><span class="chip" onclick="pickAll(false)">清除</span>' +
+      AN.courses.map(function (c) { return '<span class="chip" onclick="pickCourse(\'' + c.id + '\')">' + esc(c.label) + '（' + c.count + '）</span>'; }).join('') +
+      '</div><div class="plist" id="plist"></div><div class="hint" id="pcount"></div></div>' +
+    '<div class="lbl">快速範本</div><div class="chips">' + AN.templates.map(function (t, i) { return '<span class="chip" onclick="useTpl(' + i + ')">' + esc(t.k) + '</span>'; }).join('') + '</div>' +
+    '<div class="lbl">郵件主旨<small>至少填寫一種語言</small></div><div class="two">' +
+      '<div><div class="h">中文</div><input id="edTitle" value="' + esc(a ? a.title : '') + '"></div>' +
+      '<div><div class="h">English</div><input id="edTitleEn" placeholder="e.g. This Saturday\'s class moved online" value="' + esc(a ? a.titleEn : '') + '"></div></div>' +
+    '<div class="vars">可使用變數：<code>{{name}}</code> 學員姓名　<code>{{course}}</code> 課程名稱　<code>{{date}}</code> 上課日期（排程寄送時為對應堂次日期）</div>' +
+    '<div class="lbl">公告內容</div><div class="two">' +
+      '<div><div class="h">中文</div><textarea id="edBody" style="min-height:170px">' + esc(a ? a.body : '') + '</textarea></div>' +
+      '<div><div class="h">English</div><textarea id="edBodyEn" style="min-height:170px" placeholder="Type the English announcement here.">' + esc(a ? a.bodyEn : '') + '</textarea></div></div>' +
+    '<div class="hint">系統會把中文與英文接在同一封信裡寄出；只填一種就只寄那一種。信件由 ' + esc(BOOT.temple) + ' 報名系統寄出。</div>' +
+    '<div class="lbl">海報圖片<small>選填　PNG / JPG，最大 5MB　會顯示在公告欄，也會內嵌在信裡</small></div>' +
+    '<div id="imgBox"></div>' +
+    '<div class="lbl">發送時間<small>選擇要對應的堂次，將於課前 <input id="edHours" type="number" style="width:64px;padding:2px 6px;font-size:13px" value="' + ED.hoursBefore + '" onchange="ED.hoursBefore=Number(this.value)||36"> 小時自動發送</small></div>' +
+    '<div class="slist" id="slist">' + (AN.sessions.length ? AN.sessions.map(function (s) {
+      return '<label><input type="radio" name="sess" value="' + s.id + '"' + (ED.sessionId === s.id ? ' checked' : '') + ' onchange="pickSession(\'' + s.id + '\')">' +
+        esc(s.date) + '　' + esc(s.time) + '　第 ' + s.no + ' 堂<small>' + esc(s.course) + '</small></label>';
+    }).join('') : '<div class="empty">還沒有未來的堂次，請先到「堂次管理」新增</div>') + '</div>' +
+    '<div class="sendrow">' +
+      '<button class="btn" onclick="saveAnn(\'schedule\')">儲存排程</button>' +
+      '<button class="btn ghost" onclick="saveAnn(\'now\')">立即發送</button>' +
+      '<button class="btn ghost" onclick="saveAnn(\'board\')">只貼公告欄</button>' +
+      '<button class="btn grey" onclick="saveAnn(\'draft\')">存成草稿</button>' +
+      '<button class="btn grey" onclick="go(\'announce\')">取消</button></div>' +
+    '</div>';
+  drawTo(); drawPeople(); drawImg();
+}
 
-  var payload = {name:name, email:email,
-    phone:document.getElementById('mPhone').value.trim(),
-    note:document.getElementById('mNote').value.trim(),
-    extra:document.getElementById('mExtra').value.trim()};
-
-  var btn = busy('mBtn', '送出中⋯⋯');
-  var done = function (r) {
-    btn();
-    if (!r.ok) return mErr(r.message);
-    closeM();
-    toast(r.waitlist ? '✓ 已登記候補，有名額會以 Email 通知'
-                     : '✓ 報名成功' + (r.mailSent ? '，確認信已寄出' : '（確認信稍後補寄）'));
-    refresh();
-  };
-  var boom = function (e) { btn(); mErr('送出失敗：' + e.message); };
-
-  if (cur._kind === 'course') {
-    payload.courseId = cur.id;
-    rpc('submitEnrollment', [payload], done, boom);
+/* ---------- 海報圖片 ---------- */
+function drawImg() {
+  var box = document.getElementById('imgBox');
+  if (!box) return;
+  if (ED.image) {
+    box.innerHTML =
+      '<div style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px">' +
+        '<img src="' + esc(ED.image) + '" alt="海報" style="width:130px;height:auto;border-radius:4px;border:1px solid var(--line)" ' +
+          'onerror="this.style.display=\'none\';this.nextSibling.hidden=false">' +
+        '<div hidden style="width:130px;font-size:12px;color:var(--err)">圖片載不出來 —— 請確認 Drive 檔案已設為「知道連結的人可檢視」</div>' +
+        '<div style="flex:1;min-width:0"><div style="font-size:12.5px;color:var(--muted);word-break:break-all">' + esc(ED.image) + '</div>' +
+        '<button class="btn grey sm" style="margin-top:9px" onclick="clearImg()">移除圖片</button></div></div>';
   } else {
-    payload.ceremonyId = cur.id;
-    rpc('submitCeremony', [payload], done, boom);
+    box.innerHTML =
+      '<div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px">' +
+        '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
+          '<input type="file" id="imgFile" accept="image/png,image/jpeg" style="width:auto;border:none;padding:0;font-size:13px" onchange="doUpload(this)">' +
+          '<span id="imgStatus" style="font-size:12.5px;color:var(--muted)"></span></div>' +
+        '<div style="font-size:12.5px;color:var(--muted);margin:12px 0 6px">或貼上 Google 雲端硬碟的分享連結：</div>' +
+        '<div style="display:flex;gap:8px">' +
+          '<input type="text" id="imgUrl" placeholder="https://drive.google.com/file/d/…/view">' +
+          '<button class="btn ghost sm" onclick="useUrl()">套用</button></div>' +
+        '<div class="hint">貼連結的話，記得在 Drive 把該檔案設成「知道連結的人可以檢視」，否則學員看不到。</div>' +
+      '</div>';
   }
 }
-function mErr(m) {
-  var el = document.getElementById('mMsg');
-  el.textContent = m; el.classList.add('on');
-  return false;
+function clearImg() { ED.image = ''; ED.imageId = ''; drawImg(); }
+function useUrl() {
+  var u = document.getElementById('imgUrl').value.trim();
+  if (!u) return toast('請先貼上連結');
+  var m = u.match(/\/file\/d\/([a-zA-Z0-9_-]{20,})/) || u.match(/[?&]id=([a-zA-Z0-9_-]{20,})/);
+  ED.image = m ? 'https://lh3.googleusercontent.com/d/' + m[1] + '=w1200' : u;
+  ED.imageId = m ? m[1] : '';
+  drawImg();
 }
-
-/* ---------- 我的報名 ---------- */
-function lookupMine() {
-  var e = document.getElementById('myEmail').value.trim();
-  if (!e || e.indexOf('@') < 0) return toast('請填寫正確的 Email');
-  var box = document.getElementById('mineResult');
-  box.innerHTML = '<div class="loading">查詢中⋯⋯</div>';
-
-  rpc('getMySignups', [e], function (r) {
-    if (!r) { box.innerHTML = '<div class="empty">查不到這個 Email 的報名紀錄。</div>'; return; }
-    var s = r.student;
-    var qr = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=' +
-             encodeURIComponent(s.no || s.id);
-    box.innerHTML =
-      '<div class="grid two" style="margin-bottom:14px">' +
-        '<div class="idcard"><div class="nm">' + esc(s.name) + '</div>' +
-        '<div class="no">' + (s.no ? '學號 ' + esc(s.no) : esc(s.id)) + '</div>' +
-        '<div class="qrbox"><img src="' + qr + '" width="150" height="150" alt="學員證 QR"></div>' +
-        '<div class="tip">上課時出示此碼，<br>由義工用掃碼機簽到</div></div>' +
-        '<div class="card" style="margin:0"><h3>基本資料</h3>' +
-        kv('姓名', s.name) + kv('Email', s.email) + kv('電話', s.phone || '—') +
-        kv('學號', s.no || '—') + kv('報名次數', s.times + ' 次') + '</div>' +
-      '</div>' +
-      '<h1 style="font-size:16px;margin:22px 0 10px">報名紀錄</h1>' +
-      (r.items.length ? r.items.map(function (it) {
-        var cls = it.status === '候補' ? 'warn' : (it.status.indexOf('取消') >= 0 ? 'err' : 'ok');
-        var can = it.status === '已報名' || it.status === '候補' || it.status === '已預約';
-        return '<div class="mine"><div class="h"><span>' + it.type + '　' + esc(it.name) + '</span>' +
-          '<span class="tag ' + cls + '">' + it.status + '</span></div><div class="b">' +
-          '<div class="meta">' + esc(it.when || '—') + (it.extra ? '<br>' + esc(it.extra) : '') + '</div>' +
-          (can ? '<button class="btn grey sm" style="margin-top:9px" onclick="cancelIt(\'' +
-                 it.kind + '\',\'' + it.id + '\')">取消報名</button>' : '') +
-          '</div></div>';
-      }).join('') : '<div class="empty">目前沒有報名紀錄。</div>');
-  }, function (er) {
-    box.innerHTML = '<div class="empty">查詢失敗：' + er.message + '</div>';
+function doUpload(input) {
+  var f = input.files && input.files[0]; if (!f) return;
+  var st = document.getElementById('imgStatus');
+  st.textContent = '上傳中⋯⋯';
+  input.disabled = true;
+  uploadImage(f, TK, function (info) {
+    ED.image = info.url; ED.imageId = info.id; drawImg(); toast('✓ 圖片已上傳');
+  }, function (e) {
+    input.disabled = false; st.textContent = ''; toast(e.message);
+  }, function (n) {
+    st.textContent = '上傳中⋯⋯（' + (n * 2) + ' 秒）';
   });
 }
-function kv(k, v) { return '<div class="kv"><span>' + k + '</span>' + esc(v) + '</div>'; }
 
-function cancelIt(kind, id) {
-  if (!confirm('確定要取消這筆報名嗎？')) return;
-  rpc('cancelSignup', [kind, id], function (r) {
+function drawTo() {
+  var opts = [
+    ['全體學員', '全部學員（' + AN.totalStudents + ' 位）', '每次寄送時即時抓取，未來新加入的學員也會自動收到'],
+    ['課程學員', '依課程', '只寄給某一門課目前「已報名」的學員'],
+    ['手動名單', '手動選擇名單（一次性快照）', '名單於建立當下鎖定，之後新增學員不會反映到這份名單'],
+    ['僅公告欄', '只貼在公告欄，不寄信', '顯示在報名頁的公告欄']
+  ];
+  document.getElementById('toOpts').innerHTML = opts.map(function (o) {
+    return '<label class="opt' + (ED.to === o[0] ? ' on' : '') + '" onclick="ED.to=\'' + o[0] + '\';drawTo();drawPeople()"><input type="radio" name="to"' + (ED.to === o[0] ? ' checked' : '') + '><div><div class="t">' + o[1] + '</div><div class="s">' + o[2] + '</div></div></label>';
+  }).join('');
+  document.getElementById('courseSel').style.display = ED.to === '課程學員' ? 'block' : 'none';
+  document.getElementById('manual').style.display = ED.to === '手動名單' ? 'block' : 'none';
+  if (ED.to === '課程學員') { var sel = document.getElementById('edCourse'); if (ED.courseId) sel.value = ED.courseId; ED.courseId = sel.value; }
+}
+function drawPeople() {
+  if (ED.to !== '手動名單') return;
+  var set = {}; ED.recipients.forEach(function (e) { set[e] = 1; });
+  document.getElementById('plist').innerHTML = AN.students.map(function (s) {
+    return '<label><input type="checkbox" value="' + esc(s.email) + '"' + (set[s.email] ? ' checked' : '') + ' onchange="togglePerson(this)">' + esc(s.name) +
+      '<span style="color:var(--muted);font-size:12px">' + esc(s.email) + '</span><span class="tag ok">已確認</span></label>';
+  }).join('');
+  document.getElementById('pcount').textContent = '將發送給 ' + ED.recipients.length + ' 位學員';
+}
+function togglePerson(cb) { ED.recipients = ED.recipients.filter(function (e) { return e !== cb.value; }); if (cb.checked) ED.recipients.push(cb.value); document.getElementById('pcount').textContent = '將發送給 ' + ED.recipients.length + ' 位學員'; }
+function pickAll(on) { ED.recipients = on ? AN.students.map(function (s) { return s.email; }) : []; drawPeople(); }
+function pickCourse(cid) { var set = {}; ED.recipients.forEach(function (e) { set[e] = 1; }); AN.students.forEach(function (s) { if (s.courses.indexOf(cid) >= 0) set[s.email] = 1; }); ED.recipients = Object.keys(set); drawPeople(); }
+function pickSession(id) { ED.sessionId = id; var s = AN.sessions.filter(function (x) { return x.id === id; })[0]; if (s && ED.to === '課程學員') { ED.courseId = s.courseId; document.getElementById('edCourse').value = s.courseId; } }
+function useTpl(i) { var t = AN.templates[i]; document.getElementById('edTitle').value = t.title; document.getElementById('edBody').value = t.body; }
+function saveAnn(mode) {
+  var course = AN.courses.filter(function (c) { return c.id === ED.courseId; })[0];
+  var rec = {id:ED.id, title:v('edTitle'), titleEn:v('edTitleEn'), body:v('edBody'), bodyEn:v('edBodyEn'),
+    to:ED.to, courseId:ED.to === '課程學員' ? ED.courseId : '', course:ED.to === '課程學員' && course ? course.label : '',
+    recipients:ED.recipients, sessionId:ED.sessionId, hoursBefore:ED.hoursBefore,
+    image:ED.image, imageId:ED.imageId, pin:'否'};
+  if (mode === 'schedule' && !ED.sessionId) return toast('請選擇要對應的堂次');
+  if (mode === 'now' && !confirm('確定要立即寄出嗎？')) return;
+  rpc('announceSave', [rec, mode], function (r) {
     if (!r.ok) return toast(r.message);
-    toast('✓ 已取消');
-    lookupMine(); refresh();
-  }, function (e) { toast('取消失敗：' + e.message); });
-}
-
-/* ---------- 共用 ---------- */
-function refresh() {
-  rpc('getPublicData', [], function (d) {
-    D = d; renderCourses(); renderCeremonies();
+    var past = mode === 'schedule' && r.sendAt && new Date(r.sendAt.replace(/-/g, '/')) < new Date();
+    toast(mode === 'now' ? '✓ 已寄出 ' + r.sent + ' 封' : mode === 'schedule' ? (past ? '✓ 已排程（發送時間已過，將於 1 小時內寄出）' : '✓ 已排程：' + r.sendAt + ' 發送') : '✓ 已儲存');
+    AN = null; go('announce');
   });
 }
-function busy(id, text) {
-  var b = document.getElementById(id), old = b.textContent;
-  b.disabled = true; b.innerHTML = '<span class="spinner"></span>' + text;
-  return function () { b.disabled = false; b.textContent = old; };
+function v(id) { return document.getElementById(id).value.trim(); }
+
+/* ================= 其他頁 ================= */
+function checkin() {
+  document.getElementById('body').innerHTML = head('掃碼簽到', '用掃碼機快速登記考勤', '後台=dash|掃碼簽到') +
+    '<div class="card" style="text-align:center;padding:44px 20px"><div style="font-size:40px;line-height:1">▣</div>' +
+    '<div class="serif" style="font-size:18px;margin:10px 0 6px">掃碼簽到</div>' +
+    '<div style="color:var(--muted);font-size:13.5px;max-width:430px;margin:0 auto 20px;line-height:1.8">掃碼機在電腦眼裡就是一個鍵盤 —— 掃一下等於快速打一串字再按 Enter，不需要相機權限。</div>' +
+    '<a class="btn" style="text-decoration:none;padding:11px 26px" href="checkin.html">開啟簽到頁 →</a></div>';
 }
+function analytics() {
+  document.getElementById('body').innerHTML = head('數據分析', '報名趨勢與出席率統計', '後台=dash|數據分析') + '<div class="loading">統計中⋯⋯</div>';
+  rpc('adminAnalytics', [], function (a) {
+    var top = a.trend.reduce(function (m, x) { return x.v > m.v ? x : m; }, {v:0, m:'—'});
+    var total = a.trend.reduce(function (s, x) { return s + x.v; }, 0);
+    var order = ['已報名','候補','已完成','已取消'], cs = ['#C33A4F','#E39117','#5A63C8','#c0b4b0'];
+    var W = 480, H = 190, pad = {l:30, r:8, t:12, b:26}, T = a.trend;
+    var max = Math.max(10, Math.ceil(Math.max.apply(null, T.map(function (d) { return d.v; })) / 10) * 10);
+    var iw = W - pad.l - pad.r, ih = H - pad.t - pad.b, bw = iw / T.length;
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;overflow:visible">';
+    [0, max/2, max].forEach(function (g) { var y = pad.t + ih - g / max * ih; svg += '<line x1="' + pad.l + '" y1="' + y + '" x2="' + (W - pad.r) + '" y2="' + y + '" stroke="#ece4e1"/><text x="' + (pad.l - 6) + '" y="' + (y + 3.5) + '" text-anchor="end" font-size="10.5" fill="#8a7a76">' + g + '</text>'; });
+    T.forEach(function (d, i) { var h = d.v / max * ih, x = pad.l + i * bw + 1.5, y = pad.t + ih - h;
+      svg += '<rect x="' + x + '" y="' + y + '" width="' + (bw - 3) + '" height="' + h + '" rx="3" fill="#C33A4F"><title>' + esc(d.m) + '　' + d.v + ' 筆</title></rect>';
+      if (d.v >= max * .75) svg += '<text x="' + (x + (bw-3)/2) + '" y="' + (y - 5) + '" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5c4f4c">' + d.v + '</text>';
+      if (i % 2 === 0) svg += '<text x="' + (x + (bw-3)/2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="10.5" fill="#8a7a76">' + esc(d.m) + '</text>'; });
+    var att = a.attend.length ? a.attend.map(function (x) { var low = x.v < 75; return '<div style="display:grid;grid-template-columns:150px 1fr 46px;gap:10px;align-items:center;font-size:12.5px;margin-bottom:9px"><div style="text-align:right;color:var(--text-2)">' + esc(x.n) + '</div><div style="background:var(--accent);height:15px;border-radius:0 4px 4px 0"><div style="width:' + x.v + '%;height:100%;border-radius:0 4px 4px 0;background:' + (low ? '#E39117' : '#C33A4F') + '"></div></div><b style="color:' + (low ? 'var(--warn)' : 'var(--text-2)') + '">' + x.v + '%</b></div>'; }).join('') : '<div class="empty">還沒有出席紀錄</div>';
+    var dist = a.total ? '<div style="display:flex;height:22px;border-radius:4px;overflow:hidden;gap:2px">' + order.map(function (k, i) { return '<div style="width:' + ((a.dist[k] || 0) / a.total * 100) + '%;background:' + cs[i] + '"></div>'; }).join('') + '</div><div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:11px;font-size:12.5px">' + order.map(function (k, i) { return '<span><span style="display:inline-block;width:9px;height:9px;background:' + cs[i] + ';border-radius:2px"></span> ' + k + '　<b>' + (a.dist[k] || 0) + '</b> 筆</span>'; }).join('') + '</div>' : '<div class="empty">還沒有報名資料</div>';
+    document.getElementById('body').innerHTML = head('數據分析', '報名趨勢與出席率統計', '後台=dash|數據分析') +
+      '<div class="cards" style="margin-bottom:16px">' + [['近 12 個月報名', total], ['最高月份', top.m + '（' + top.v + '）'], ['報名總筆數', a.total]].map(function (x) { return '<div class="mcard" style="cursor:default"><div class="num">' + x[1] + '</div><div class="t">' + x[0] + '</div></div>'; }).join('') + '</div>' +
+      '<div class="two"><div class="card"><h3>每月報名筆數</h3>' + svg + '</svg></div><div class="card"><h3>各課程出席率</h3>' + att + '</div></div>' +
+      '<div class="card"><h3>報名狀態分布</h3>' + dist + '</div>';
+  });
+}
+function settings() {
+  document.getElementById('body').innerHTML = head('系統設定', '網址、排程與資料庫', '後台=dash|系統設定') +
+    '<div class="card"><h3>資料庫</h3>' + line('Google 試算表', '<a href="' + BOOT.sheetUrl + '" target="_blank">開啟 →</a>') + line('分頁數', BOOT.modules.length + ' 張') +
+      '<div class="note" style="margin-top:12px">所有資料都在這份試算表裡，直接在裡面改也會同步到這個後台。備份就是「檔案 → 建立副本」。</div></div>' +
+    '<div class="card"><h3>三個頁面網址</h3>' + line('學員報名', '<code>' + location.href.replace(/[^/]*$/, '') + 'index.html</code>') + line('後台管理', '<code>' + location.href.replace(/[^/]*$/, '') + 'admin.html</code>') + line('掃碼簽到', '<code>' + location.href.replace(/[^/]*$/, '') + 'checkin.html</code>') + '</div>' +
+    '<div class="card"><h3>排程</h3>' + line('寄排程公告', '每小時　<code>processAnnouncements</code>') + line('清郵件佇列', '每小時　<code>flushMailQueue</code>') + line('課前提醒信', '每天 9:00　<code>sendReminders</code>') +
+      '<div class="note" style="margin-top:12px">在指令碼編輯器執行一次 <code>installTriggers()</code> 就會裝好。</div></div>' +
+    '<div class="card"><h3>帳號</h3>' + line('目前登入', '<b>' + esc(BOOT.me) + '</b>') + '<div class="note" style="margin-top:12px">登入帳號與密碼在試算表的「帳號」分頁，也可以從首頁的「登入帳號」卡片進去改。</div></div>';
+}
+function line(k, v) { return '<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:13px"><span style="color:var(--muted)">' + k + '</span><span style="text-align:right;word-break:break-all">' + v + '</span></div>'; }
+
 var tT;
-function toast(m) {
-  var el = document.getElementById('toast');
-  el.textContent = m; el.classList.add('on');
-  clearTimeout(tT); tT = setTimeout(function () { el.classList.remove('on'); }, 2800);
-  return false;
-}
-function esc(s) {
-  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function toast(m) { var el = document.getElementById('toast'); el.textContent = m; el.classList.add('on'); clearTimeout(tT); tT = setTimeout(function () { el.classList.remove('on'); }, 2600); }
+function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
 </body>
 </html>
