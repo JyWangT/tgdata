@@ -292,7 +292,12 @@ function renderAnn() {
   box.innerHTML = D.announcements.length ? D.announcements.map(function (a) {
     return '<div class="ann' + (a.pin ? ' pin' : '') + '"><div class="t">' + esc(a.title) +
       (a.pin ? '<span class="tag">置頂</span>' : '') + '</div><div class="d">' + esc(a.date) +
-      '</div><div class="b">' + esc(a.body) + '</div></div>';
+      '</div><div class="b">' + esc(a.body) + '</div>' +
+      (a.image ? '<div style="margin-top:10px"><a href="' + esc(a.image) + '" target="_blank" rel="noopener">' +
+        '<img src="' + esc(a.image) + '" alt="海報" loading="lazy" ' +
+        'style="max-width:100%;width:340px;height:auto;border:1px solid var(--line);border-radius:5px;display:block" ' +
+        'onerror="this.parentNode.parentNode.style.display=\'none\'"></a></div>' : '') +
+      '</div>';
   }).join('') : '<div class="empty">目前沒有公告。</div>';
 }
 
